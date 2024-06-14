@@ -9,6 +9,13 @@
 {% endblock %}
 
 {% block content %}
-  Главная страница
+     {% for article in Article %}
+         <div class="alert alert-light">
+             <h1>{{ article.title }}</h1>
+             <p>{{ article.description }}</p>
+             <span class="text-muted">Публикация: {{ article.date }}</span>
+             <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+         </div>
+        {% endfor %}
 {% endblock %}
 
