@@ -22,9 +22,11 @@
         <li class="nav-item">
           <a class="nav-link {% block popular_active %}{% endblock %}" href="{% url 'popular' %}">Популярные</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {% block subscription_active %}{% endblock %}" href="{% url 'subscription' %}">Подписки</a>
-        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link {% block subscription_active %}{% endblock %}" href="{% url 'subscription' %}">Подписки</a>
+            </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link {% block shop_active %}{% endblock %}" href="{% url 'shop' %}">Магазин</a>
         </li>
@@ -37,9 +39,22 @@
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a href="{%  url 'reg' %}">
-             <button class="btn btn-outline-warning">Регистрация</button>
-          </a>
+          {% if not user.is_authenticated %}
+              <a href="{%  url 'reg' %}">
+                 <button class="btn btn-outline-warning">Регистрация</button>
+              </a>
+              <a href="{%  url 'user' %}">
+                 <button class="btn btn-outline-warning">Войти</button>
+              </a>
+          {% else %}
+              <a href="{%  url 'profile' %}">
+                 <button class="btn btn-outline-warning">Профиль</button>
+              </a>
+              <form id="exit" action="{% url "exit" %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-warning">Выйти</button>
+              </form>
+          {% endif %}
         </li>
       </ul>
     </div>

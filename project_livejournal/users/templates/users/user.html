@@ -1,0 +1,22 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}
+  Страница авторизации
+{% endblock %}
+
+{% block content %}
+  <div class="container auth-container">
+    <div class="registration-form">
+      <h1 class="text-center">Авторизация</h1>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center">
+          <button class="btn btn-outline-warning" type="submit">Войти</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+
