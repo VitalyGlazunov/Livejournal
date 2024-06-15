@@ -1,0 +1,9 @@
+div.registration-form {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #dee2e6;
+      border-radius: 0.375rem;
+      background-color: #ffffff;
+      box-shadow: 0 0.125rem 0.25rem rgb(247, 190, 0);
+}

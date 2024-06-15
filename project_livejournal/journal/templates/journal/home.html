@@ -9,13 +9,25 @@
 {% endblock %}
 
 {% block content %}
-     {% for article in Article %}
-         <div class="alert alert-light">
-             <h1>{{ article.title }}</h1>
-             <p>{{ article.description }}</p>
-             <span class="text-muted">Публикация: {{ article.date }}</span>
-             <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
-         </div>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-1 sidebar">
+        <h5>Здесь может быть другой контент</h5>
+      </div>
+      <div class="col-md-10 text-center">
+        {% for article in Article %}
+          <div class="alert alert-light">
+            <h1>{{ article.title }}</h1>
+            <p>{{ article.description }}</p>
+            <span class="text-muted">Публикация: {{ article.date }}</span>
+            <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+          </div>
         {% endfor %}
+      </div>
+      <div class="col-md-1 sidebar">
+        <h5>Здесь может быть другой контент</h5>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
