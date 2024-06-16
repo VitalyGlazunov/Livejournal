@@ -6,16 +6,16 @@ from django.utils import timezone
 # Модель для статьи
 class Article(models.Model):
     CATEGORY_CHOICES = [
-        ('Category №1', 'Рубрика №1'),
-        ('Category №2', 'Рубрика №2'),
-        ('Category №3', 'Рубрика №3'),
-        ('Category №4', 'Рубрика №4'),
-        ('Category №5', 'Рубрика №5'),
+        ('Рубрика №1', 'Category №1'),
+        ('Рубрика №2', 'Category №2'),
+        ('Рубрика №3', 'Category №3'),
+        ('Рубрика №4', 'Category №4'),
+        ('Рубрика №5', 'Category №5'),
     ]
     title = models.CharField('Название', max_length=100)
     description = models.CharField('Описание', max_length=255)
     text = models.TextField('Основной текст')
-    category = models.CharField(max_length=50, verbose_name='Рубрика', choices=CATEGORY_CHOICES, default='Category №1')
+    category = models.CharField(max_length=50, verbose_name='Рубрика', choices=CATEGORY_CHOICES, default='Рубрика №1')
     author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE)
     publication = models.BooleanField('Статус публикации', default=False)
     date = models.DateTimeField('Дата', default=timezone.now)
@@ -57,6 +57,6 @@ class Follow(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='Имя пользователя', on_delete=models.CASCADE)
     article = models.ForeignKey(Article, verbose_name='Cтатья', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

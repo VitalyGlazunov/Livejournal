@@ -39,3 +39,49 @@
   font-size: 16px;
   padding: 10px 20px;
 }
+
+.user_images {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+body {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  padding-top: 60px;
+}
+
+.alert-light {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+   .fixed-top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+
+.profile-container {
+  text-align: center;
+}
+
+.user_images {
+  display: block;
+  margin: 0 auto;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.no-underline {
+    text-decoration: none;
+    color: inherit;
+}
+

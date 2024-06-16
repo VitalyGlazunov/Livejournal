@@ -6,12 +6,12 @@
 
 {% block content %}
   <div class="container">
-    <div class="registration-form">
+    <div class="registration-form alert-light">
       <h1 class="text-center">Регистрация</h1>
       <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-         <div class="text-center">
+        <div class="text-center">
           <button class="btn btn-outline-warning" type="submit">Зарегистрироваться</button>
           <hr>
           <a href="{% url 'user' %}">Уже есть аккаунт</a>

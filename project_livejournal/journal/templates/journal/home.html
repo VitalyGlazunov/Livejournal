@@ -9,25 +9,43 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-1 sidebar">
-        <h5>Здесь может быть другой контент</h5>
-      </div>
-      <div class="col-md-10 text-center">
-        {% for article in Article %}
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-1 sidebar">
+          <h5>Здесь может быть другой контент</h5>
+        </div>
+        <div class="col-md-10">
+          {% for article in Article %}
           <div class="alert alert-light">
-            <h1>{{ article.title }}</h1>
-            <p>{{ article.description }}</p>
-            <span class="text-muted">Публикация: {{ article.date }}</span>
-            <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+            <div class="row">
+              <h1 style="text-align: center;"><strong>{{ article.title }}</strong></h1>
+              <div class="col-md-2">
+                <a href="{% url 'profile' %}" class="no-underline">
+                  <div class="profile-container">
+                    <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
+                    {% if article.author.profile.status == 'User' %}
+                    <img src="pictures/main_page/user_label.png" alt="Badge" width="180">
+                    {% elif article.author.profile.status == 'Admin' %}
+                    <img src="pictures/main_page/admin_label.png" alt="Badge" width="180">
+                    {% else %}
+                    <img src="pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+                    {% endif %}
+                    <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-10">
+                <p><b>Описание:</b> {{ article.description }}</p>
+                <p><b>Рубрика:</b> {{ article.category }}</p>
+                <p class="right-align">Было опубликовано {{ article.date }}</p>
+              </div>
+            </div>
           </div>
-        {% endfor %}
-      </div>
-      <div class="col-md-1 sidebar">
-        <h5>Здесь может быть другой контент</h5>
+          {% endfor %}
+        </div>
+        <div class="col-md-1 sidebar">
+          <h5>Здесь может быть другой контент</h5>
+        </div>
       </div>
     </div>
-  </div>
 {% endblock %}
-
