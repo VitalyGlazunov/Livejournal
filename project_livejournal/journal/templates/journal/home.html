@@ -18,8 +18,8 @@
           {% for article in Article %}
           <div class="alert alert-light">
             <div class="row">
-              <h1 style="text-align: center;"><strong>{{ article.title }}</strong></h1>
-              <div class="col-md-2">
+                <h1 style="text-align: center;"><strong>{{ article.title}}</strong></h1>
+              <div class="col-md-3">
                 <a href="{% url 'profile' %}" class="no-underline">
                   <div class="profile-container">
                     <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
@@ -34,14 +34,33 @@
                   </div>
                 </a>
               </div>
-              <div class="col-md-10">
-                <p><b>Описание:</b> {{ article.description }}</p>
+              <div class="col-md-9">
                 <p><b>Рубрика:</b> {{ article.category }}</p>
+                <p><b>Описание: </b>{{ article.description|striptags|truncatechars:180}}</p>
+                  <a class="btn btn-outline-warning" href="{%  url 'articles-detail' article.id %}">Читать далее</a>
                 <p class="right-align">Было опубликовано {{ article.date }}</p>
               </div>
             </div>
           </div>
           {% endfor %}
+          {% if is_paginated %}
+              {% if page_obj.has_previous %}
+                  <a href="{% url 'home' %}" class="btn btn-outline-danger">Начало</a>
+                  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-danger">Предыдущая</a>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                  <button class ="btn btn-danger">{{ num }}</button>
+                  {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                    <a href="?page={{ num }}" class="btn btn-outline-danger">{{ num }}</a>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+                  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-danger">Следующая</a>
+                  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-danger">Последняя</a>
+              {% endif %}
+          {% endif %}
         </div>
         <div class="col-md-1 sidebar">
           <h5>Здесь может быть другой контент</h5>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.urls import reverse
 
 
 # Модель для статьи
@@ -13,13 +14,16 @@ class Article(models.Model):
         ('Рубрика №5', 'Category №5'),
     ]
     title = models.CharField('Название', max_length=100)
-    description = models.CharField('Описание', max_length=255)
+    description = models.TextField('Описание')
     text = models.TextField('Основной текст')
     category = models.CharField(max_length=50, verbose_name='Рубрика', choices=CATEGORY_CHOICES, default='Рубрика №1')
     author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE)
     publication = models.BooleanField('Статус публикации', default=False)
     date = models.DateTimeField('Дата', default=timezone.now)
     likes = models.IntegerField('Количество лайков', default=0)
+
+    def get_absolute_url(self):
+        return reverse('articles-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.title
