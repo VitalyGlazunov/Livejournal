@@ -85,3 +85,65 @@ body {
     color: inherit;
 }
 
+.menu{
+    display: flex;
+}
+
+.menu li{
+    width: 100px;
+    list-style: none;
+    background: #0D6EFD;
+    position: relative;
+}
+
+.menu a{
+    color: #F0FFFF;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    transition: all .5s;
+}
+
+.menu a:hover{
+    background: #663399;
+}
+
+.menu ul{
+    position: absolute;
+    left: 0;
+    top:100%;
+    display: none;
+    padding: 0;
+}
+
+.menu li:hover ul{
+    display: block;
+}
+
+.purple li a:hover {
+    background: #663399
+}
+
+.red-square-cat {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  background-color: #DC5954;
+}
+
+.lines {
+  top: 50%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  border-bottom: 12px double #fff;
+  border-top: 4px solid #fff;
+  content: "";
+  height: 4px;
+  width: 30px;
+  box-sizing: unset;
+  display: inline-block;
+  vertical-align: middle;
+}

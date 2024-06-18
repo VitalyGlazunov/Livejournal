@@ -10,15 +10,23 @@
 <body background="{% static 'pictures/background.jpg' %}" alt="">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top navbar">
   <div class="container-fluid">
-    <a class="navbar-brand">Живой Журнал</a>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 purple ">
         <li class="nav-item">
-          <a class="nav-link {% block home_active %}{% endblock %}" aria-current="page" href="{% url 'home' %}">Главная</a>
+          <a class="nav-link {% block home_active %}{% endblock %}" aria-current="page" href="{% url 'home' %}">Живой Журнал</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link {% block categories_active %}{% endblock %}" href="{% url 'categories' %}">Рубрики</a>
-        </li>
+          <ul class="menu">
+             <li><a href="#">&Congruent;  Рубрика    </a>
+          <ul>
+              <li><a href="#">Тема 1</a></li>
+              <li><a href="#">Тема 2</a></li>
+              <li><a href="#">Тема 3</a></li>
+         </ul>
+      </li>
+
+
+  </ul>
         <li class="nav-item">
           <a class="nav-link {% block popular_active %}{% endblock %}" href="{% url 'popular' %}">Популярные</a>
         </li>
