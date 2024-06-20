@@ -1,17 +1,15 @@
 {% extends 'journal/base.html' %}
 
 {% block title %}
-  Главная страница
-{% endblock %}
-
-{% block home_active %}
-  active
+  Страница пользователя
 {% endblock %}
 
 {% block content %}
+    <h2>Все статьи от автора {{ view.kwargs.username }}</h2>
+    <h4>Количетсво: {{ page_obj.paginator.count }}</h4>
     <div class="container mt-5">
       <div class="row">
-        <div class="col-md-1 sidebar">
+        <div class="col-md-2 sidebar">
           <h5>Здесь может быть другой контент</h5>
         </div>
         <div class="col-md-10">
@@ -20,19 +18,17 @@
             <div class="row">
                 <h1 style="text-align: center;"><strong>{{ article.title}}</strong></h1>
               <div class="col-md-3">
-                <a href="{% url 'user-articles' article.author %}" class="no-underline">
                   <div class="profile-container">
                     <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
                     {% if article.author.profile.status == 'User' %}
-                    <img src="pictures/main_page/user_label.png" alt="Badge" width="180">
+                    <img src="/pictures/main_page/user_label.png" alt="Badge" width="180">
                     {% elif article.author.profile.status == 'Admin' %}
-                    <img src="pictures/main_page/admin_label.png" alt="Badge" width="180">
+                    <img src="/pictures/main_page/admin_label.png" alt="Badge" width="180">
                     {% else %}
-                    <img src="pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+                    <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
                     {% endif %}
                     <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
                   </div>
-                </a>
               </div>
               <div class="col-md-9">
                 <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
@@ -45,7 +41,7 @@
           {% endfor %}
           {% if is_paginated %}
               {% if page_obj.has_previous %}
-                  <a href="{% url 'home' %}" class="btn btn-outline-danger">Начало</a>
+                  <a href="{% url 'user-articles' view.kwargs.username %}" class="btn btn-outline-danger">Начало</a>
                   <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-danger">Предыдущая</a>
               {% endif %}
 
@@ -61,9 +57,6 @@
                   <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-danger">Последняя</a>
               {% endif %}
           {% endif %}
-        </div>
-        <div class="col-md-1 sidebar">
-          <h5>Здесь может быть другой контент</h5>
         </div>
       </div>
     </div>

@@ -29,13 +29,13 @@
                     {% else %}
                         <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
                     {% endif %}
-                    <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+                    <p><b>Автор:</b> <mark>{{ article.author}}</mark></p>
                   </div>
                 </a>
               </div>
               <div class="col-md-9">
                 <p><b>Описание:</b> {{ article.description }}</p>
-                <p><b>Рубрика:</b> {{ article.category }}</p>
+                <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
                 <p class="right-align">Было опубликовано {{ article.date }}</p>
               </div>
             </div>

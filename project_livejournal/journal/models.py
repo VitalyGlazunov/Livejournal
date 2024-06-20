@@ -7,11 +7,11 @@ from django.urls import reverse
 # Модель для статьи
 class Article(models.Model):
     CATEGORY_CHOICES = [
-        ('Рубрика №1', 'Category №1'),
-        ('Рубрика №2', 'Category №2'),
-        ('Рубрика №3', 'Category №3'),
-        ('Рубрика №4', 'Category №4'),
-        ('Рубрика №5', 'Category №5'),
+        ('Category №1', 'Рубрика №1'),
+        ('Category №2', 'Рубрика №2'),
+        ('Category №3', 'Рубрика №3'),
+        ('Category №4', 'Рубрика №4'),
+        ('Category №5', 'Рубрика №5'),
     ]
     title = models.CharField('Название', max_length=100)
     description = models.TextField('Описание')
@@ -24,6 +24,10 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('articles-detail', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        self.date = timezone.now()
+        super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
