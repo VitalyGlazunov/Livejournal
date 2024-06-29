@@ -9,6 +9,14 @@
 {% endblock %}
 
 {% block content %}
-  Рубрики
+  <h1>Статьи в категории  {{view.kwargs.category}}</h1>
+  <ul>
+    {% for article in articles %}
+      <li>
+          <h2>{{article.title}}</h2>
+          <p>{{article.description }}</p>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
 

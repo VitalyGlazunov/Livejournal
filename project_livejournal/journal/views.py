@@ -98,9 +98,14 @@ class DeleteArticleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
-class CategoriesView(ListView):
+class CategoriesDetailView(ListView):
     model = Article
     template_name = 'journal/categories.html'
+    context_object_name = 'articles'
+
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return Article.objects.filter(category=category, publication=True)
 
 
 class PopularView(ListView):

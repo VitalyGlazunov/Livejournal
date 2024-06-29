@@ -17,11 +17,12 @@
           <a class="nav-link {% block home_active %}{% endblock %}" aria-current="page" href="{% url 'home' %}">Живой Журнал</a>
         </li>
           <ul class="menu">
-             <li><a href={% url 'categories' %}>&Congruent;  Рубрика    </a>
+             <li><a href="#">=  Рубрика</a>
           <ul>
-              <li><a href="#">Тема 1</a></li>
-              <li><a href="#">Тема 2</a></li>
-              <li><a href="#">Тема 3</a></li>
+              <li><a href="{% url 'categories' category='Category №1' %}">Тема 1</a></li>
+              <li><a href="{% url 'categories' category='Category №2' %}">Тема 2</a></li>
+              <li><a href="{% url 'categories' category='Category №3' %}">Тема 3</a></li>
+              <li><a href="{% url 'categories' category='Category №4' %}">Тема 4</a></li>
          </ul>
       </li>
 

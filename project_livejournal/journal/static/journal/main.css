@@ -152,4 +152,26 @@ body {
   display: inline-block;
   vertical-align: middle;
 }
+.faq {
+  width: 80%;
+  margin: 0 auto;
+}
+
+details {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+summary {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+details[open] {
+  background-color: #eef;
+}
+
 >>>>>>> 6d6a5beff446a153a7885cbf989ae87d2510b54c
