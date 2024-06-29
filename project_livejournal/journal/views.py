@@ -1,10 +1,14 @@
 from django.shortcuts import get_object_or_404
-from .models import Article
+from .models import Article, Comment, Like, Follow
+from .forms import CommentForm
 from django.contrib.auth.models import User
 from users.models import Profile
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404
+from django.urls import reverse
+from django.views import View
+from django.shortcuts import redirect
 
 
 class HomeView(ListView):
@@ -45,6 +49,9 @@ class ArticleDetailView(DetailView):
         if user.is_authenticated:
             profile = Profile.objects.get(user=user)
             ctx['profile'] = profile
+            ctx['comment_form'] = CommentForm()
+            ctx['user_has_liked'] = Like.objects.filter(article=self.object, liked_by=user, like=True).exists()
+            ctx['is_following'] = Follow.objects.filter(follower=user, following=self.object.author).exists()
         return ctx
 
 
@@ -114,8 +121,21 @@ class PopularView(ListView):
 
 
 class SubscriptionView(LoginRequiredMixin, ListView):
-    model = Article
+    model = Follow
     template_name = 'journal/subscription.html'
+    context_object_name = 'follows'
+
+    def get_queryset(self):
+        return Follow.objects.filter(follower=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        user_to_follow = User.objects.get(pk=request.POST.get('user_id'))
+        if user_to_follow != request.user:
+            if Follow.objects.filter(follower=request.user, following=user_to_follow).exists():
+                Follow.objects.filter(follower=request.user, following=user_to_follow).delete()
+            else:
+                Follow.objects.create(follower=request.user, following=user_to_follow)
+        return redirect('subscription')
 
 
 class ShopView(ListView):
@@ -131,3 +151,47 @@ class AboutUsView(ListView):
 class GuideView(ListView):
     model = Article
     template_name = 'journal/guide.html'
+
+
+class AddCommentView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.article = article
+            comment.save()
+        return redirect('articles-detail', pk=pk)
+
+
+class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def post(self, request, pk, comment_id):
+        comment = get_object_or_404(Comment, pk=comment_id, article_id=pk)
+        if request.user.is_superuser or comment.author == request.user:
+            comment.delete()
+        return redirect('articles-detail', pk=pk)
+
+    def test_func(self):
+        comment = get_object_or_404(Comment, pk=self.kwargs['comment_id'])
+        return self.request.user.is_superuser or self.request.user == comment.author
+
+
+class AddLikeView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        user = request.user
+
+        like, created = Like.objects.get_or_create(article=article, liked_by=user)
+
+        if not created:
+            like.delete()
+        else:
+            like.like = True
+            like.save()
+
+        article.likes = Like.objects.filter(article=article, like=True).count()
+        article.save()
+        return redirect('articles-detail', pk=pk)
+
+

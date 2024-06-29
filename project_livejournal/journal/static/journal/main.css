@@ -84,12 +84,6 @@ body {
     color: inherit;
 }
 
-<<<<<<< HEAD
-
-
-
-
-=======
 .menu{
     display: flex;
 }
@@ -174,4 +168,10 @@ details[open] {
   background-color: #eef;
 }
 
->>>>>>> 6d6a5beff446a153a7885cbf989ae87d2510b54c
+.list-group-item {
+    word-wrap: break-word;
+  }
+
+.no-resize {
+    resize: none;
+}

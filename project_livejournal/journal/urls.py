@@ -14,4 +14,7 @@ urlpatterns = [
     path('shop', views.ShopView.as_view(), name='shop'),
     path('about-us', views.AboutUsView.as_view(), name='about-us'),
     path('guide', views.GuideView.as_view(), name='guide'),
+    path('articles/<int:pk>/comment/add/', views.AddCommentView.as_view(), name='add-comment'),
+    path('articles/<int:pk>/comment/<int:comment_id>/delete/', views.DeleteCommentView.as_view(), name='delete-comment'),
+    path('article/<int:pk>/like/', views.AddLikeView.as_view(), name='like-article'),
 ]

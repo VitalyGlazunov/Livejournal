@@ -9,6 +9,12 @@
 {% endblock %}
 
 {% block content %}
-  Подписки
+  <h2>Список подписок</h2>
+  <ul>
+    {% for follow in follows %}
+      <li><a href="{% url 'user-articles' follow.following.username %}" class="no-underline">{{ follow.following.username }}</a></li>
+    {% empty %}
+      <li>Вы еще ни на кого не подписались.</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
-

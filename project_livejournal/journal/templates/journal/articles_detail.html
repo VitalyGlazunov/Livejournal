@@ -9,41 +9,92 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-1 sidebar">
-          <h5>Здесь может быть другой контент</h5>
-        </div>
-        <div class="col-md-10">
-          <div class="alert alert-light">
-            <div class="row">
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-1 sidebar">
+        <h5>Здесь может быть другой контент</h5>
+      </div>
+      <div class="col-md-10">
+        <div class="alert alert-light">
+          <div class="row">
+            <div class="col-md-3">
+              <a href="{% url 'profile' %}" class="no-underline">
+                <div class="profile-container">
+                  <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
+                  {% if article.author.profile.status == 'User' %}
+                    <img src="/pictures/main_page/user_label.png" alt="Badge" width="180">
+                  {% elif article.author.profile.status == 'Admin' %}
+                    <img src="/pictures/main_page/admin_label.png" alt="Badge" width="180">
+                  {% else %}
+                    <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+                  {% endif %}
+                  <p><b>Автор:</b> <mark>{{ article.author }}</mark></p>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-9">
               <h1 style="text-align: center;"><strong>{{ article.title }}</strong></h1>
-              <div class="col-md-3">
-                <a href="{% url 'profile' %}" class="no-underline">
-                  <div class="profile-container">
-                    <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
-                    {% if article.author.profile.status == 'User' %}
-                        <img src="/pictures/main_page/user_label.png" alt="Badge" width="180">
-                    {% elif article.author.profile.status == 'Admin' %}
-                        <img src="/pictures/main_page/admin_label.png" alt="Badge" width="180">
-                    {% else %}
-                        <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
-                    {% endif %}
-                    <p><b>Автор:</b> <mark>{{ article.author}}</mark></p>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-9">
-                <p><b>Описание:</b> {{ article.description }}</p>
-                <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
-                <p class="right-align">Было опубликовано {{ article.date }}</p>
-              </div>
+              <p><b>Описание:</b> {{ article.description }}</p>
+              <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
+              <p class="right-align">Было опубликовано {{ article.date }}</p>
+            </div>
+            {% if user.is_authenticated %}
+              {% if article.author != user %}
+                <form method="post" action="{% url 'subscription' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="user_id" value="{{ article.author.id }}">
+                  {% if is_following %}
+                    <button type="submit" class="btn btn-danger">Отписаться</button>
+                  {% else %}
+                    <button type="submit" class="btn btn-primary">Подписаться</button>
+                  {% endif %}
+                </form>
+              {% endif %}
+            {% endif %}
+            <div class="like-section">
+              {% if user.is_authenticated %}
+                <form method="post" action="{% url 'like-article' article.pk %}">
+                  {% csrf_token %}
+                  {% if user_has_liked %}
+                    <button type="submit" class="btn btn-danger">Удалить лайк</button>
+                  {% else %}
+                    <button type="submit" class="btn btn-primary">Добавить лайк</button>
+                  {% endif %}
+                </form>
+              {% endif %}
+              <p>{{ article.likes }} лайков</p>
             </div>
           </div>
+          <hr>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add-comment' article.pk %}">
+              {% csrf_token %}
+              {{ comment_form.as_p }}
+              <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+            </form>
+          {% endif %}
         </div>
-        <div class="col-md-1 sidebar">
-          <h5>Здесь может быть другой контент</h5>
-        </div>
+        <h2>Комментарии</h2>
+        <ul class="list-group mt-4">
+          {% for comment in article.comments.all %}
+            <li class="list-group-item">
+              <strong>{{ comment.author.username }}</strong> {{ comment.date|date:"d M Y H:i" }}
+              <p>{{ comment.text }}</p>
+              {% if comment.author == user or user.is_superuser %}
+                <form method="post" action="{% url 'delete-comment' article.pk comment.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                </form>
+              {% endif %}
+            </li>
+          {% empty %}
+            <li class="list-group-item">Комментариев пока нет.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-1 sidebar">
+        <h5>Здесь может быть другой контент</h5>
       </div>
     </div>
+  </div>
 {% endblock %}

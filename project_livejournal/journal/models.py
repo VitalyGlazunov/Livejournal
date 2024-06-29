@@ -26,7 +26,12 @@ class Article(models.Model):
         return reverse('articles-detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
-        self.date = timezone.now()
+        if self.pk is None:
+            self.date = timezone.now()
+        else:
+            original = Article.objects.get(pk=self.pk)
+            if self.likes == original.likes:
+                self.date = timezone.now()
         super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -65,6 +70,14 @@ class Follow(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, verbose_name='Имя пользователя', on_delete=models.CASCADE)
-    article = models.ForeignKey(Article, verbose_name='Cтатья', on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, verbose_name='Статья')
+    liked_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
+    like = models.BooleanField('Лайк', default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.liked_by}: {self.article}{self.like}'
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
