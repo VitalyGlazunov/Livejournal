@@ -9,6 +9,9 @@ from django.http import Http404
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import redirect
+from cloudipsp import Api, Checkout
+import uuid
+import json
 
 
 class HomeView(ListView):
@@ -142,6 +145,35 @@ class ShopView(ListView):
     model = Article
     template_name = 'journal/shop.html'
 
+    def get_checkout_url(self, data):
+        api = Api(merchant_id=1548266, secret_key='k3JSxRVX0SRUqFhLxXaGyp8LxZSM8z8D')
+        checkout = Checkout(api=api)
+        return checkout.url(data).get('checkout_url')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        data1 = {
+            "currency": "RUB",
+            "amount": 80000,
+            "order_desc": "Покупка VIP статуса для пользователя на пол года",
+            "order_id": str(uuid.uuid1()),
+            "merchant_data": user.username
+        }
+        data2 = {
+            "currency": "RUB",
+            "amount": 150000,
+            "order_desc": "Покупка VIP статуса для пользователя на год",
+            "order_id": str(uuid.uuid1()),
+            "merchant_data": user.username
+        }
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+            ctx['profile'] = profile
+            ctx['url1'] = self.get_checkout_url(data1)
+            ctx['url2'] = self.get_checkout_url(data2)
+        return ctx
+
 
 class AboutUsView(ListView):
     model = Article
@@ -154,6 +186,7 @@ class GuideView(ListView):
 
 
 class AddCommentView(LoginRequiredMixin, View):
+
     def post(self, request, pk):
         article = get_object_or_404(Article, pk=pk)
         form = CommentForm(request.POST)
@@ -166,6 +199,7 @@ class AddCommentView(LoginRequiredMixin, View):
 
 
 class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, View):
+
     def post(self, request, pk, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id, article_id=pk)
         if request.user.is_superuser or comment.author == request.user:
@@ -178,6 +212,7 @@ class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 class AddLikeView(LoginRequiredMixin, View):
+
     def post(self, request, pk):
         article = get_object_or_404(Article, pk=pk)
         user = request.user
@@ -195,3 +230,30 @@ class AddLikeView(LoginRequiredMixin, View):
         return redirect('articles-detail', pk=pk)
 
 
+class CallBackPaymentView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        username = data.get('username')
+        if username:
+            user_profile = get_object_or_404(Profile, user__username=username)
+            user_profile.status = 'User VIP'
+            user_profile.save()
+
+
+class TestShopView(LoginRequiredMixin, View):
+    template_name = 'journal/shop.html'
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        data = {
+            "username": user.username
+        }
+        json_string = json.dumps(data)
+        data = json.loads(json_string)
+        username = data.get('username')
+        if request.user.is_authenticated:
+            if username == user.username:
+                profile = request.user.profile
+                profile.status = 'User VIP'
+                profile.save()
+            return redirect('shop')

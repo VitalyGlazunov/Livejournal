@@ -17,4 +17,6 @@ urlpatterns = [
     path('articles/<int:pk>/comment/add/', views.AddCommentView.as_view(), name='add-comment'),
     path('articles/<int:pk>/comment/<int:comment_id>/delete/', views.DeleteCommentView.as_view(), name='delete-comment'),
     path('article/<int:pk>/like/', views.AddLikeView.as_view(), name='like-article'),
+    path('callback', views.CallBackPaymentView.as_view(), name="callback"),
+    path('test-shop/', views.TestShopView.as_view(), name='test_shop'),
 ]

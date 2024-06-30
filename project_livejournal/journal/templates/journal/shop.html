@@ -9,6 +9,53 @@
 {% endblock %}
 
 {% block content %}
-  Магазин
+  {% if user.is_authenticated == False or profile.status == "User" %}
+  <section class="shop">
+    <div class="container">
+      <div class="shop_container">
+        <div class="shop_item">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>150 РУБ <span>в месяц</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>
+              Возможность редактирования своих статей после публикации
+            </li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+           <form method="post" action="{% url 'test_shop' %}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="upgrade_to_vip" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+          </form>
+        </div>
+        <div class="shop_item v2">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>800 РУБ <span>в пол года</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>
+              Возможность редактирования своих статей после публикации
+            </li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+          <a href="{{url1}}" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</a>
+        </div>
+        <div class="shop_item v3">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>1500 РУБ <span>в год</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>
+              Возможность редактирования своих статей после публикации
+            </li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+          <a href="{{url2}}" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% else %}
+    <p>Вы обладаете всеми доступными привилегиями</p>
+  {% endif %}
 {% endblock %}
-

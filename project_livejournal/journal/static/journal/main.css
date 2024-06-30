@@ -175,3 +175,76 @@ details[open] {
 .no-resize {
     resize: none;
 }
+
+
+.shop {
+    margin-top: 120px; /* Добавляет отступ сверху для секции */
+  }
+
+.shop_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.shop_item {
+    width: 360px;
+    padding: 30px;
+    box-shadow: 0 3px 85px rgba(228, 54, 13, 0.17);
+    background: #1e0d09;
+    background-size: cover;
+}
+
+.shop_item.v2 {
+    background-size: cover;
+}
+
+.shop_item.v3 {
+    background-size: cover;
+}
+
+.shop_item h3 {
+    color: #818181;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.shop_item.v2 h3 {
+    color: #c2a738;
+
+}
+
+.shop_item.v3 h3 {
+    color: #682e2e;
+}
+
+.shop_item p {
+    color: #e4360d;
+    font-size: 16px;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.shop_item p span {
+    font-weight: 400;
+    display: block;
+}
+
+
+
+.shop_item li {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+
+
