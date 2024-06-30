@@ -39,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'journal.middleware.SubscriptionMiddleware',
 ]
 
 ROOT_URLCONF = 'project_livejournal.urls'

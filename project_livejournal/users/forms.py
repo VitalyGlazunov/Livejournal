@@ -31,6 +31,12 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if any(char in username for char in '@/_'):
+            raise forms.ValidationError('Нельзя вводить символы: @, /, _')
+        return username
+
 
 class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(
@@ -48,6 +54,12 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if any(char in username for char in '@/_'):
+            raise forms.ValidationError('Нельзя вводить символы: @, /, _')
+        return username
 
 
 class ProfileImageForm(forms.ModelForm):

@@ -5,8 +5,21 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Все статьи от автора {{ view.kwargs.username }}</h2>
+    <h2>Все статьи от автора {{ author }}</h2>
     <h4>Количетсво: {{ page_obj.paginator.count }}</h4>
+    {% if user.is_authenticated %}
+        {% if author != user %}
+            <form method="post" action="{% url 'subscription' %}">
+              {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{ author.id }}">
+                {% if is_following %}
+                  <button type="submit" class="btn btn-danger">Отписаться</button>
+                {% else %}
+                  <button type="submit" class="btn btn-primary">Подписаться</button>
+                {% endif %}
+           </form>
+        {% endif %}
+    {% endif %}
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-2 sidebar">
@@ -19,15 +32,25 @@
                 <h1 style="text-align: center;"><strong>{{ article.title}}</strong></h1>
               <div class="col-md-3">
                   <div class="profile-container">
-                    <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
-                    {% if article.author.profile.status == 'User' %}
+                    <img src="{{ article.author.profile.img.url }}" alt="{{ author }}" class="user_images">
+                    {% if author.profile.status == 'User' %}
                     <img src="/pictures/main_page/user_label.png" alt="Badge" width="180">
-                    {% elif article.author.profile.status == 'Admin' %}
+                    {% elif author.profile.status == 'Admin' %}
                     <img src="/pictures/main_page/admin_label.png" alt="Badge" width="180">
                     {% else %}
                     <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
                     {% endif %}
-                    <p><b>Автор:</b> <mark>{{ article.author.username }}</mark></p>
+                    <p><b>Автор:</b> <mark>{{ author.username }}</mark></p>
+                    {% if user == article.author %}
+                      {% if user.profile.status == 'User VIP' or not article.publication %}
+                        <a class="btn btn-outline-primary" href="{% url 'articles-update' article.id %}">Редактировать</a>
+                      {% elif user.is_superuser %}
+                        <a class="btn btn-outline-primary" href="{% url 'articles-update' article.id %}">Редактировать</a>
+                      {% endif %}
+                    {% endif %}
+                    {% if user == article.author or user.is_superuser %}
+                      <a class="btn btn-outline-danger" href="{% url 'articles-delete' article.id %}">Удалить</a>
+                    {% endif %}
                   </div>
               </div>
               <div class="col-md-9">

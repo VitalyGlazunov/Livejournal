@@ -5,25 +5,30 @@
 {% endblock %}
 
 {% block content %}
-  Кабинет пользователя
+  <h1>Кабинет пользователя</h1>
+  <p>Информация обо мне</p>
   <div class="d-flex text-body-secondary pt-3">
     <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="64" height="64" src="{{ user.profile.img.url }}">
-    <p class="pb-3 mb-0 small lh-sm border-bottom">
+    <div class="pb-3 mb-0 small lh-sm border-bottom">
       <strong class="d-block text-gray-dark">@{{ user.username }}</strong>
-      Some representative placeholder content, with some information about this user. Imagine this being some sort of status update, perhaps?
-    </p>
-  </div>
-  <div class="container">
-    <div class="registration-form alert-light">
-      <h1 class="text-center">Обновить</h1>
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ updateUserForm.as_p }}
-        {{ profileForm.as_p }}
-        <div class="text-center">
-          <button class="btn btn-outline-warning" type="submit">Обновить</button>
-        </div>
-      </form>
+      <p>
+        {% if user.profile.status == 'User VIP' %}
+          <span class="badge bg-warning text-dark">VIP</span>
+          {% if user.profile.vip_status_expiry %}
+            VIP до {{ user.profile.vip_status_expiry }}
+          {% endif %}
+        {% else %}
+          {{ user.profile.get_status_display }}
+        {% endif %}
+      </p>
+      <p>
+        Some representative placeholder content, with some information about this user.
+        Imagine this being some sort of status update, perhaps?
+      </p>
     </div>
   </div>
+
+  <a href="{% url 'profile_settings' %}" class="btn btn-outline-danger">Настройки</a>
+  <a href="{% url 'articles-add' %}" class="btn btn-outline-danger">Добавить статью</a>
+  <a href="{% url 'user-articles' user.username %}" class="btn btn-outline-danger">Мои статьи</a>
 {% endblock %}

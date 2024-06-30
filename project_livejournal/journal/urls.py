@@ -19,4 +19,5 @@ urlpatterns = [
     path('article/<int:pk>/like/', views.AddLikeView.as_view(), name='like-article'),
     path('callback', views.CallBackPaymentView.as_view(), name="callback"),
     path('test-shop/', views.TestShopView.as_view(), name='test_shop'),
+    path('some-url/', views.SomeView.as_view(), name='some_view')
 ]

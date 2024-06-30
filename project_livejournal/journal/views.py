@@ -12,6 +12,10 @@ from django.shortcuts import redirect
 from cloudipsp import Api, Checkout
 import uuid
 import json
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+
 
 
 class HomeView(ListView):
@@ -32,7 +36,20 @@ class UserAllArticlesView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs['username'])
+        if self.request.user == user:
+            return Article.objects.filter(author=user).order_by('-date')
         return Article.objects.filter(author=user, publication=True).order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+            ctx['profile'] = profile
+            author = get_object_or_404(User, username=self.kwargs['username'])
+            ctx['is_following'] = Follow.objects.filter(follower=user, following=author).exists()
+            ctx['author'] = author
+        return ctx
 
 
 class ArticleDetailView(DetailView):
@@ -91,19 +108,26 @@ class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         articles = self.get_object()
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
         if self.request.user == articles.author:
-            return True
+            if not articles.publication or profile.status == 'User VIP' or self.request.user.is_superuser:
+                return True
         return False
+
+    def handle_no_permission(self):
+        raise Http404("Статья не найдена или вы не имеете прав для её обновления.")
 
 
 class DeleteArticleView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
     success_url = '/profile/'
     template_name = 'journal/articles-delete.html'
+    context_object_name = 'Article'
 
     def test_func(self):
         articles = self.get_object()
-        if self.request.user == articles.author:
+        if self.request.user == articles.author or self.request.user.is_superuser:
             return True
         return False
 
@@ -127,6 +151,15 @@ class SubscriptionView(LoginRequiredMixin, ListView):
     model = Follow
     template_name = 'journal/subscription.html'
     context_object_name = 'follows'
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+            ctx['profile'] = profile
+        return ctx
 
     def get_queryset(self):
         return Follow.objects.filter(follower=self.request.user)
@@ -233,10 +266,18 @@ class AddLikeView(LoginRequiredMixin, View):
 class CallBackPaymentView(View):
     def post(self, request):
         data = json.loads(request.body)
-        username = data.get('username')
-        if username:
+        username = data.get('merchant_data')
+        amount = data.get('amount')
+        catalog = {
+            15000: 31,
+            80000: 183,
+            150000: 365
+        }
+        if username and amount in data:
+            vip_status_expiry_days = catalog[amount]
             user_profile = get_object_or_404(Profile, user__username=username)
             user_profile.status = 'User VIP'
+            user_profile.vip_status_expiry = timezone.now() + timedelta(days=vip_status_expiry_days)
             user_profile.save()
 
 
@@ -246,14 +287,26 @@ class TestShopView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         user = self.request.user
         data = {
-            "username": user.username
+            "merchant_data": user.username,
         }
         json_string = json.dumps(data)
         data = json.loads(json_string)
-        username = data.get('username')
+        username = data.get('merchant_data')
         if request.user.is_authenticated:
             if username == user.username:
                 profile = request.user.profile
                 profile.status = 'User VIP'
+                profile.vip_status_expiry = timezone.now() + timedelta(seconds=10)
                 profile.save()
             return redirect('shop')
+
+
+class SomeView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            if profile.status == 'User VIP' and profile.vip_status_expiry is not None:
+                if profile.vip_status_expiry < timezone.now():
+                    profile.status = 'User'
+                    profile.vip_status_expiry = None
+                    profile.save()

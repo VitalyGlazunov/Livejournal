@@ -12,6 +12,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='Имя пользователя', on_delete=models.CASCADE)
     img = models.ImageField('Фото пользователя', default='default_user.png', upload_to='user_images')
     status = models.CharField(max_length=20, verbose_name='Статус пользователя', choices=STATUS_CHOICES, default='User')
+    vip_status_expiry = models.DateTimeField(verbose_name='Окончание VIP статуса', null=True, blank=True)
     def __str__(self):
         return f'Профайл пользователя {self.user.username}'
 

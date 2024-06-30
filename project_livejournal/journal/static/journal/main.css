@@ -178,7 +178,7 @@ details[open] {
 
 
 .shop {
-    margin-top: 120px; /* Добавляет отступ сверху для секции */
+    margin-top: 120px;
   }
 
 .shop_container {
@@ -235,8 +235,6 @@ details[open] {
     display: block;
 }
 
-
-
 .shop_item li {
     color: #ffffff;
 
@@ -246,5 +244,7 @@ details[open] {
     position: relative;
 }
 
-
-
+/* для фиксации формы при создании/редактировании статьи */
+textarea {
+        resize: none;
+    }

@@ -18,7 +18,7 @@
         <div class="alert alert-light">
           <div class="row">
             <div class="col-md-3">
-              <a href="{% url 'profile' %}" class="no-underline">
+              <a href="{% url 'user-articles' article.author %}" class="no-underline">
                 <div class="profile-container">
                   <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user_images">
                   {% if article.author.profile.status == 'User' %}
@@ -34,8 +34,9 @@
             </div>
             <div class="col-md-9">
               <h1 style="text-align: center;"><strong>{{ article.title }}</strong></h1>
-              <p><b>Описание:</b> {{ article.description }}</p>
               <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
+              <p><b>Описание:</b> {{ article.description|safe }}</p>
+              <p><b>Содержание:</b> {{ article.text|safe }}</p>
               <p class="right-align">Было опубликовано {{ article.date }}</p>
             </div>
             {% if user.is_authenticated %}

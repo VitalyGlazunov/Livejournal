@@ -5,7 +5,8 @@ from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegisterForm, ProfileImageForm, UserUpdateForm
-
+from .models import Profile
+from django.views.generic import TemplateView
 
 class RegisterView(FormView):
     template_name = 'users/registration.html'
@@ -19,8 +20,8 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 
-class ProfileView(LoginRequiredMixin, View):
-    template_name = 'users/profile.html'
+class ProfileSettingsView(LoginRequiredMixin, View):
+    template_name = 'users/profile_settings.html'
 
     def get(self, request, *args, **kwargs):
         profile_form = ProfileImageForm(instance=request.user.profile)
@@ -42,3 +43,16 @@ class ProfileView(LoginRequiredMixin, View):
             'profileForm': profile_form,
             'updateUserForm': update_user_form
         })
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        profile = Profile.objects.get_or_create(user=user)[0]  # Ensure profile exists
+        context['user'] = user
+        context['profile'] = profile
+        return context
+
