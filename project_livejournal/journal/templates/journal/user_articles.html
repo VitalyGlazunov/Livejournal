@@ -57,7 +57,11 @@
                 <p><b>Рубрика:</b> {{ article.get_category_display }}</p>
                 <p><b>Описание: </b>{{ article.description|striptags|truncatechars:180}}</p>
                   <a class="btn btn-outline-warning" href="{%  url 'articles-detail' article.id %}">Читать далее</a>
-                <p class="right-align">Было опубликовано {{ article.date }}</p>
+                {% if not article.publication and user == article.author%}
+                    <p class="right-align">Статья не опубликована</p>
+                {% else %}
+                    <p class="right-align">Было опубликовано {{ article.date }}</p>
+                {% endif %}
               </div>
             </div>
           </div>

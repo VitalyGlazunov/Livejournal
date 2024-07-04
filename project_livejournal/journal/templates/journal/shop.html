@@ -15,7 +15,7 @@
       <div class="shop_container">
         <div class="shop_item">
           <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
-          <p>150 РУБ <span>в месяц</span></p>
+          <p>Бесплатно <span>на 10 секунд</span></p>
           <ul>
             <li>Получение префикса "VIP пользователь"</li>
             <li>
@@ -38,7 +38,10 @@
             </li>
             <li>Попадание любой статьи в раздел "Популярные"</li>
           </ul>
-          <a href="{{url1}}" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</a>
+           <form method="post" action="{{url1}}">
+             {% csrf_token %}
+             <button type="submit" name="action" value="upgrade_to_vip_half_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+           </form>
         </div>
         <div class="shop_item v3">
           <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
@@ -50,7 +53,10 @@
             </li>
             <li>Попадание любой статьи в раздел "Популярные"</li>
           </ul>
-          <a href="{{url2}}" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</a>
+          <form method="post" action="{{url2}}">
+             {% csrf_token %}
+             <button type="submit" name="action" value="upgrade_to_vip_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+           </form>
         </div>
       </div>
     </div>

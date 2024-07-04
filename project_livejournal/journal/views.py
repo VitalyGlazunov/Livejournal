@@ -36,19 +36,19 @@ class UserAllArticlesView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs['username'])
-        if self.request.user == user:
+        if not self.request.user == user:
             return Article.objects.filter(author=user).order_by('-date')
         return Article.objects.filter(author=user, publication=True).order_by('-date')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         user = self.request.user
+        author = get_object_or_404(User, username=self.kwargs['username'])
+        ctx['author'] = author
         if user.is_authenticated:
             profile = Profile.objects.get(user=user)
             ctx['profile'] = profile
-            author = get_object_or_404(User, username=self.kwargs['username'])
             ctx['is_following'] = Follow.objects.filter(follower=user, following=author).exists()
-            ctx['author'] = author
         return ctx
 
 
@@ -186,26 +186,33 @@ class ShopView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         user = self.request.user
-        data1 = {
-            "currency": "RUB",
-            "amount": 80000,
-            "order_desc": "Покупка VIP статуса для пользователя на пол года",
-            "order_id": str(uuid.uuid1()),
-            "merchant_data": user.username
-        }
-        data2 = {
-            "currency": "RUB",
-            "amount": 150000,
-            "order_desc": "Покупка VIP статуса для пользователя на год",
-            "order_id": str(uuid.uuid1()),
-            "merchant_data": user.username
-        }
         if user.is_authenticated:
             profile = Profile.objects.get(user=user)
             ctx['profile'] = profile
-            ctx['url1'] = self.get_checkout_url(data1)
-            ctx['url2'] = self.get_checkout_url(data2)
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+        user = self.request.user
+        if action == 'upgrade_to_vip_half_year' and user.is_authenticated:
+            data2 = {
+                "currency": "RUB",
+                "amount": 80000,
+                "order_desc": "Покупка VIP статуса для пользователя на пол года",
+                "order_id": str(uuid.uuid1()),
+                "merchant_data": request.user.username
+            }
+            return redirect(self.get_checkout_url(data2))
+        elif action == 'upgrade_to_vip_year' and user.is_authenticated:
+            data1 = {
+                "currency": "RUB",
+                "amount": 150000,
+                "order_desc": "Покупка VIP статуса для пользователя на год",
+                "order_id": str(uuid.uuid1()),
+                "merchant_data": request.user.username
+            }
+            return redirect(self.get_checkout_url(data1))
+        return redirect('user')
 
 
 class AboutUsView(ListView):
@@ -300,13 +307,3 @@ class TestShopView(LoginRequiredMixin, View):
                 profile.save()
             return redirect('shop')
 
-
-class SomeView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            profile = request.user.profile
-            if profile.status == 'User VIP' and profile.vip_status_expiry is not None:
-                if profile.vip_status_expiry < timezone.now():
-                    profile.status = 'User'
-                    profile.vip_status_expiry = None
-                    profile.save()
