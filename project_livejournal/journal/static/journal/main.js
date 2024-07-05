@@ -27,32 +27,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-function generateUrl(amount, description) {
-  const data = {
-    "currency": "RUB",
-    "amount": amount,
-    "order_desc": description,
-    "order_id": '{{ uuid.uuid1() }}',
-    "merchant_data": '{{ username }}'
-  };
 
-  fetch('/generate_checkout_url/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      alert('Ошибка при генерации URL');
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-}
