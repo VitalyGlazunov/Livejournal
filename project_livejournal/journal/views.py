@@ -22,7 +22,7 @@ class HomeView(ListView):
     model = Article
     template_name = 'journal/home.html'
     context_object_name = 'Article'
-    paginate_by = 2
+    paginate_by = 5
 
     def get_queryset(self):
         return Article.objects.filter(publication=True).order_by('-date')

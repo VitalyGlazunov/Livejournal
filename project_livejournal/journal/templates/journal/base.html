@@ -10,23 +10,23 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-white fixed-top navbar">
+  <p class="logo user-select-none">InformProduct</p>
   <div class="container-fluid">
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 purple ">
         <li class="nav-item">
-          <a class="nav-link {% block home_active %}{% endblock %}" aria-current="page" href="{% url 'home' %}">InformProduct</a>
+          <a class="nav-link {% block home_active %}{% endblock %}" aria-current="page" href="{% url 'home' %}">Последние</a>
         </li>
-          <ul class="menu">
-             <li><a class="rubrika" href="#" id="rubrikaLink">=  Рубрика</a>
+        <div class="menu">
+          <li><a class="rubrika" href="#" id="rubrikaLink">=  Рубрика</a>
           <ul class="submenu">
-              <li><a href="{% url 'categories' category='Category №1' %}">Тема 1</a></li>
-              <li><a href="{% url 'categories' category='Category №2' %}">Тема 2</a></li>
-              <li><a href="{% url 'categories' category='Category №3' %}">Тема 3</a></li>
-              <li><a href="{% url 'categories' category='Category №4' %}">Тема 4</a></li>
-         </ul>
-      </li>
-  </ul>
+            <li><a href="{% url 'categories' category='Category №1' %}">Тема 1</a></li>
+            <li><a href="{% url 'categories' category='Category №2' %}">Тема 2</a></li>
+            <li><a href="{% url 'categories' category='Category №3' %}">Тема 3</a></li>
+            <li><a href="{% url 'categories' category='Category №4' %}">Тема 4</a></li>
+          </ul>
+          </li>
+        </div>
         <li class="nav-item">
           <a class="nav-link {% block popular_active %}{% endblock %}" href="{% url 'popular' %}">Популярные</a>
         </li>

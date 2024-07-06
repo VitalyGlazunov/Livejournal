@@ -35,7 +35,7 @@ class Article(models.Model):
                 self.date = timezone.now()
         super(Article, self).save(*args, **kwargs)
         image = Image.open(self.img.path)
-        resize = (240, 240)
+        resize = (210, 210)
         resized_image = image.resize(resize)
         resized_image.save(self.img.path)
 
