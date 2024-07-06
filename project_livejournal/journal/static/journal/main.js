@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     const submenuLinks = document.querySelectorAll('.submenu a');
     const rubrikaLink = document.getElementById('rubrikaLink');
@@ -6,13 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentUrl = window.location.href;
     submenuLinks.forEach(link => {
         if (currentUrl === link.href) {
-            rubrikaLink.classList.add('active-rubrika');
+            rubrikaLink.classList.add('active');
         }
     });
 
     submenuLinks.forEach(link => {
         link.addEventListener('click', function() {
-            rubrikaLink.classList.add('active-rubrika');
+            rubrikaLink.classList.add('active');
         });
     });
 
@@ -20,39 +19,38 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         if (!link.classList.contains('submenu')) {
             link.addEventListener('click', function() {
-                rubrikaLink.classList.remove('active-rubrika');
+                rubrikaLink.classList.remove('active');
             });
         }
     });
 });
 
 
-function generateUrl(amount, description) {
-  const data = {
-    "currency": "RUB",
-    "amount": amount,
-    "order_desc": description,
-    "order_id": '{{ uuid.uuid1() }}',
-    "merchant_data": '{{ username }}'
-  };
+document.addEventListener("DOMContentLoaded", function() {
+    const buttons = document.querySelectorAll(".button-user button");
 
-  fetch('/generate_checkout_url/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      alert('Ошибка при генерации URL');
+    function deactivateButtons() {
+        buttons.forEach(button => {
+            button.classList.remove("active");
+        });
     }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-}
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function() {
+            deactivateButtons();
+            this.classList.add("active");
+        });
+    });
+
+    const currentUrl = window.location.href;
+    buttons.forEach(button => {
+        const buttonLink = button.closest("a").getAttribute("href");
+        if (currentUrl.includes(buttonLink)) {
+            deactivateButtons();
+            button.classList.add("active");
+        }
+    });
+});
+
+
+

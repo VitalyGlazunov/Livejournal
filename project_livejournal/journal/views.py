@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from .models import Article, Comment, Like, Follow
-from .forms import CommentForm
+from .forms import CommentForm, ArticleForm
 from django.contrib.auth.models import User
 from users.models import Profile
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -22,10 +22,12 @@ class HomeView(ListView):
     model = Article
     template_name = 'journal/home.html'
     context_object_name = 'Article'
-    paginate_by = 3
+    paginate_by = 2
 
     def get_queryset(self):
         return Article.objects.filter(publication=True).order_by('-date')
+
+
 
 
 class UserAllArticlesView(ListView):
@@ -36,7 +38,7 @@ class UserAllArticlesView(ListView):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs['username'])
-        if not self.request.user == user:
+        if self.request.user == user:
             return Article.objects.filter(author=user).order_by('-date')
         return Article.objects.filter(author=user, publication=True).order_by('-date')
 
@@ -78,7 +80,7 @@ class ArticleDetailView(DetailView):
 class CreateArticleView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = 'journal/create_article.html'
-    fields = ['title', 'category', 'description', 'text', 'publication']
+    form_class = ArticleForm
 
     def get_context_data(self, **kwargs):
         ctx = super(CreateArticleView, self).get_context_data(**kwargs)
@@ -94,7 +96,7 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
 class UpdateArticleView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
     template_name = 'journal/create_article.html'
-    fields = ['title', 'category', 'description', 'text', 'publication']
+    form_class = ArticleForm
 
     def get_context_data(self, **kwargs):
         ctx = super(UpdateArticleView, self).get_context_data(**kwargs)

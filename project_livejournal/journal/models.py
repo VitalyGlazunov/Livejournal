@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
-
+from PIL import Image
 
 # Модель для статьи
 class Article(models.Model):
@@ -21,6 +21,7 @@ class Article(models.Model):
     publication = models.BooleanField('Статус публикации', default=False)
     date = models.DateTimeField('Дата', default=timezone.now)
     likes = models.IntegerField('Количество лайков', default=0)
+    img = models.ImageField('Превью', default='default_preview.png', upload_to='preview_images')
 
     def get_absolute_url(self):
         return reverse('articles-detail', kwargs={'pk': self.pk})
@@ -33,6 +34,10 @@ class Article(models.Model):
             if self.likes == original.likes:
                 self.date = timezone.now()
         super(Article, self).save(*args, **kwargs)
+        image = Image.open(self.img.path)
+        resize = (240, 240)
+        resized_image = image.resize(resize)
+        resized_image.save(self.img.path)
 
     def __str__(self):
         return self.title

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'journal/main.css' %}">
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
 </head>
-<body background='/pictures/background.jpg' alt="">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-white fixed-top navbar">
   <div class="container-fluid">
 
@@ -50,18 +50,18 @@
           <div class="button-user">
           {% if not user.is_authenticated %}
               <a href="{% url 'reg' %}">
-                 <button class="btn btn-outline-dark">Регистрация</button>
+                 <button id="btn-registration" class="btn btn-outline-dark  btn-rectangular">Регистрация</button>
               </a>
-              <a href="{% url 'user' %}">
-                 <button class="btn btn-outline-dark">Войти</button>
+              <a class ="url-user" href="{% url 'user' %}">
+                 <button id="btn-login" class="btn btn-outline-dark  btn-rectangular">Войти</button>
               </a>
           {% else %}
-              <a href="{% url 'profile' %}">
-                 <button class="btn btn-outline-dark">Профиль</button>
+              <a class ="url-user" href="{% url 'profile' %}">
+                 <button id="btn-profile" class="btn btn-outline-dark  btn-rectangular">Профиль</button>
               </a>
-              <form id="exit" action="{% url 'exit' %}" method="POST">
+              <form  id="exit" action="{% url 'exit' %}" method="POST">
                   {% csrf_token %}
-                  <button class="btn btn-outline-dark" background="pictures/main_page/background.jpg">Выйти</button>
+                  <button class="btn btn-outline-dark  btn-rectangular" background="pictures/main_page/background.jpg">Выйти</button>
               </form>
           {% endif %}
           </div>
