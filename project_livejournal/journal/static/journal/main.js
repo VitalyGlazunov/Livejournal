@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const buttons = document.querySelectorAll(".button-user button");
 
@@ -51,6 +50,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
-
-
 

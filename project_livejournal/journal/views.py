@@ -28,8 +28,6 @@ class HomeView(ListView):
         return Article.objects.filter(publication=True).order_by('-date')
 
 
-
-
 class UserAllArticlesView(ListView):
     model = Article
     template_name = 'journal/user_articles.html'
@@ -143,10 +141,25 @@ class CategoriesDetailView(ListView):
         category = self.kwargs['category']
         return Article.objects.filter(category=category, publication=True)
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        category = self.kwargs['category']
+        category_choices = dict(Article. CATEGORY_CHOICES)
+        if category in category_choices:
+            ctx['category'] = category_choices[category]
+        return ctx
+
 
 class PopularView(ListView):
     model = Article
     template_name = 'journal/popular.html'
+    context_object_name = 'Article'
+    peginate = 3
+
+    def get_queryset(self):
+        return Article.objects.filter(publication=True).filter(
+            Q(author__profile__status='User VIP') | Q(likes__gte=5)
+        ).order_by('-likes')
 
 
 class SubscriptionView(LoginRequiredMixin, ListView):

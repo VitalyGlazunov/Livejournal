@@ -1,7 +1,7 @@
 {% extends 'journal/base.html' %}
 
 {% block title %}
-  Рубрики
+  {{categoty}}
 {% endblock %}
 
 {% block categories_active %}
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Статьи в категории  {{view.kwargs.category}}</h1>
+  <h1>Статьи в категории  {{category}}</h1>
   <ul>
     {% for article in articles %}
       <li>
@@ -19,4 +19,3 @@
     {% endfor %}
   </ul>
 {% endblock %}
-
