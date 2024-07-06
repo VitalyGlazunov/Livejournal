@@ -375,3 +375,11 @@ textarea {
     user-select: none;
 }
 
+/* линия под шапкой сайта*/
+.black_line_under_shapka{
+    position: fixed;
+    top: 75px;
+    width: 100%;
+    border: 1px solid black;
+    z-index: 9999;
+}
