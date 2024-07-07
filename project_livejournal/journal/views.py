@@ -22,7 +22,7 @@ class HomeView(ListView):
     model = Article
     template_name = 'journal/home.html'
     context_object_name = 'Article'
-    paginate_by = 5
+    paginate_by = 2
 
     def get_queryset(self):
         return Article.objects.filter(publication=True).order_by('-date')
@@ -82,8 +82,8 @@ class CreateArticleView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(CreateArticleView, self).get_context_data(**kwargs)
-        ctx['title'] = 'Добавление статьи'
-        ctx['btn_text'] = 'Добавить статью'
+        ctx['title'] = 'Создание статьи'
+        ctx['btn_text'] = 'Создать статью'
         return ctx
 
     def form_valid(self, form):

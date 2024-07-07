@@ -11,7 +11,7 @@ class CommentForm(forms.ModelForm):
             'text': forms.Textarea(
                 attrs={
                     'class': 'no-resize',
-                    'cols': 140,
+                    'cols': 130,
                     'rows': 3,
                     "placeholder": "Введите комментарий",
                 }
@@ -32,16 +32,17 @@ class ArticleForm(forms.ModelForm):
     description = forms.CharField(
         label='Описание',
         required=True,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'rows': 2}),
     )
     text = forms.CharField(
         label='Основной текст',
         required=True,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'rows': 16}),
     )
     publication = forms.BooleanField(
         label='Статус публикации',
         required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check'}),
     )
     img = forms.ImageField(
         label='Превью',
@@ -52,3 +53,4 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['title', 'category', 'description', 'text', 'publication', 'img']
+

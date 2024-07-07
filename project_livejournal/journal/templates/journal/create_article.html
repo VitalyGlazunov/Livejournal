@@ -5,18 +5,31 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="registration-form alert-light">
-      <h1 class="text-center">{{ btn_text }}</h1>
+  <div class="container create-article">
+    <div class="tilted-text font">{{ title }}</div>
+    <div class="form-container alert-light">
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="form-group">
+          <label>{{ form.title.label }}</label>
+           {{ form.title}}
+          <label>{{ form.category.label }}</label>
+           {{ form.category}}
+          <label>{{ form.description.label }}</label>
+           {{ form.description}}
+          <label>{{ form.text.label }}</label>
+          {{ form.text}}
+        </div>
+        <label>{{ form.img.label }}</label>
+           {{ form.img}}
+           <div>
+         <label class="form-check-label">{{ form.publication.label }}</label>
+         {{ form.publication }}
+    </div>
         <div class="text-center">
-          <button class="btn btn-outline-warning" type="submit">{{ btn_text }}</button>
+          <button class="btn btn-outline-dark btn-rectangular" type="submit">{{ btn_text }}</button>
         </div>
       </form>
     </div>
   </div>
 {% endblock %}
-
-
