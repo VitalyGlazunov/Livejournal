@@ -11,7 +11,7 @@ class CommentForm(forms.ModelForm):
             'text': forms.Textarea(
                 attrs={
                     'class': 'no-resize',
-                    'cols': 130,
+                    'cols': 153,
                     'rows': 3,
                     "placeholder": "Введите комментарий",
                 }

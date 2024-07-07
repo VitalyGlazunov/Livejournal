@@ -9,8 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="tilted-text font article-title-detail">{{ article.title|striptags }}</div>
+<div class="tilted-text font">{{ article.title|striptags }}</div>
   <div class="article-container">
     <div class="author-article-line">
       <a href="{% url 'user-articles' article.author %}" class="no-underline">
@@ -94,7 +93,5 @@
             <li class="list-group-item">Комментариев пока нет.</li>
           {% endfor %}
         </ul>
-      </div>
-</div>
 {% endblock %}
 

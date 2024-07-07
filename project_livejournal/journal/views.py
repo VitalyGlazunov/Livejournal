@@ -173,11 +173,14 @@ class SubscriptionView(LoginRequiredMixin, ListView):
         user = self.request.user
         if user.is_authenticated:
             profile = Profile.objects.get(user=user)
+            following_users = Follow.objects.filter(follower=user)
+            following_ids = following_users.values_list('following_id', flat=True)
+            ctx['is_following'] = following_ids
             ctx['profile'] = profile
         return ctx
 
     def get_queryset(self):
-        return Follow.objects.filter(follower=self.request.user)
+        return Follow.objects.filter(follower=self.request.user).order_by('-date')
 
     def post(self, request, *args, **kwargs):
         user_to_follow = User.objects.get(pk=request.POST.get('user_id'))
