@@ -167,8 +167,11 @@ body {
   vertical-align: middle;
 }
 .faq {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
+  font-family: 'Impact', sans-serif;
+  letter-spacing: 2px;
+  word-spacing: 1px;
 }
 
 details {
@@ -203,7 +206,7 @@ ul.list-group > li.list-group-item {
 
 
 .shop {
-    margin-top: 120px;
+    margin-top: 60px;
   }
 
 .shop_container {
@@ -213,7 +216,7 @@ ul.list-group > li.list-group-item {
 }
 
 .shop_item {
-    width: 360px;
+    width: 330px;
     padding: 30px;
     box-shadow: 0 3px 85px rgba(228, 54, 13, 0.17);
     background: #1e0d09;
@@ -229,7 +232,7 @@ ul.list-group > li.list-group-item {
 }
 
 .shop_item h3 {
-    color: #818181;
+    color: #D3D3D3;
     font-family: Montserrat;
     font-size: 24px;
     font-weight: 700;
@@ -238,16 +241,16 @@ ul.list-group > li.list-group-item {
 }
 
 .shop_item.v2 h3 {
-    color: #c2a738;
+    color: #F4A460;
 
 }
 
 .shop_item.v3 h3 {
-    color: #682e2e;
+    color: #FFD700;
 }
 
 .shop_item p {
-    color: #e4360d;
+    color: white;
     font-size: 16px;
     font-weight: 900;
     text-align: center;

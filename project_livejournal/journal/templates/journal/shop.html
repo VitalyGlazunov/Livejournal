@@ -9,7 +9,11 @@
 {% endblock %}
 
 {% block content %}
+    <div class="container ">
+       <div class="tilted-text font"> Магазин</div>
+
   {% if user.is_authenticated == False or profile.status == "User" %}
+
   <section class="shop">
     <div class="container">
       <div class="shop_container">
@@ -64,4 +68,5 @@
   {% else %}
     <p>Вы обладаете всеми доступными привилегиями</p>
   {% endif %}
+
 {% endblock %}
