@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegisterForm, ProfileImageForm, UserUpdateForm
 from .models import Profile
 from django.views.generic import TemplateView
+from journal.models import Article, Like
 
 class RegisterView(FormView):
     template_name = 'users/registration.html'
@@ -51,8 +52,12 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        profile = Profile.objects.get_or_create(user=user)[0]  # Ensure profile exists
+        profile = Profile.objects.get_or_create(user=user)[0]
         context['user'] = user
         context['profile'] = profile
+        article_count = Article.objects.filter(author=user).count()
+        context['article_count'] = article_count
+        total_likes = Like.objects.filter(article__author=user, like=True, article__publication=True).count()
+        context['total_likes'] = total_likes
         return context
 

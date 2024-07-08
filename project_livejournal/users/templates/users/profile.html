@@ -5,30 +5,51 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Кабинет пользователя</h1>
-  <p>Информация обо мне</p>
-  <div class="d-flex text-body-secondary pt-3">
-    <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="64" height="64" src="{{ user.profile.img.url }}">
-    <div class="pb-3 mb-0 small lh-sm border-bottom">
-      <strong class="d-block text-gray-dark">@{{ user.username }}</strong>
-      <p>
-        {% if user.profile.status == 'User VIP' %}
-          <span class="badge bg-warning text-dark">VIP</span>
-          {% if user.profile.vip_status_expiry %}
-            VIP до {{ user.profile.vip_status_expiry }}
-          {% endif %}
+  <div class="font tilted-text">Кабинет пользователя</div>
+  <div class="personal-account">
+    <p class="font"><b>Информация обо мне</b></p>
+    <div class="profile">
+      <div>
+        <img class="profile-img" src="{{ user.profile.img.url }}" alt="Profile Picture">
+        {% if profile.status == 'User' %}
+          <img src="/pictures/main_page/user_label.png" alt="Badge" height="50" width="160" class="badge-image">
+        {% elif profile.status == 'Admin' %}
+          <img src="/pictures/main_page/admin_label.png" alt="Badge" height="50" width="160" class="badge-image">
         {% else %}
-          {{ user.profile.get_status_display }}
+          <img src="/pictures/main_page/user_vip_label.png" alt="Badge" height="50" width="160" class="badge-image">
         {% endif %}
-      </p>
-      <p>
-        Some representative placeholder content, with some information about this user.
-        Imagine this being some sort of status update, perhaps?
-      </p>
+      </div>
+      <div class="profile-details text-author">
+        <p><b>Имя пользователя:</b> {{ user.username }}</p>
+        <p><b>E-mail:</b>
+          {% if user.email %}
+            {{ user.email}}
+          {% else %}
+            Не указан
+          {% endif %}
+        </p>
+        <p><b>Статус:</b>
+          {% if user.profile.status == 'Admin'%}
+            <span class="badge bg-danger text-white">{{ user.profile.get_status_display }}</span>
+          {% elif user.profile.status == 'User VIP' %}
+            <span class="badge bg-warning text-white">VIP</span>
+            {% if user.profile.vip_status_expiry %}
+              (VIP до {{ user.profile.vip_status_expiry }})
+            {% else %}
+              (Навсегда)
+            {% endif %}
+          {% else %}
+             <span class="badge bg-secondary text-white">{{ user.profile.get_status_display }}</span>
+          {% endif %}
+        </p>
+        <p><b>Количество статьей:</b> {{ article_count }}</p>
+        <p><b>Количество лайков:</b> {{ total_likes }}</p>
+      </div>
+    </div>
+    <div class="profile-buttons">
+        <a href="{% url 'profile_settings' %}" class="btn btn-outline-dark btn-rectangular">Настройки</a>
+        <a href="{% url 'articles-add' %}" class="btn btn-outline-dark btn-rectangular">Добавить статью</a>
+        <a href="{% url 'user-articles' user.username %}" class="btn btn-outline-dark btn-rectangular">Мои статьи</a>
     </div>
   </div>
-
-  <a href="{% url 'profile_settings' %}" class="btn btn-outline-danger">Настройки</a>
-  <a href="{% url 'articles-add' %}" class="btn btn-outline-danger">Добавить статью</a>
-  <a href="{% url 'user-articles' user.username %}" class="btn btn-outline-danger">Мои статьи</a>
 {% endblock %}

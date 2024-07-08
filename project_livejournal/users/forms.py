@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 class UserRegisterForm(UserCreationForm):
     username = forms.CharField(
-        label='Имя пользователся',
+        label='Имя пользователя',
         required=True,
         help_text='Нельзя вводить символы: @, /, _',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите имя пользователя'})
@@ -35,6 +35,8 @@ class UserRegisterForm(UserCreationForm):
         username = self.cleaned_data['username']
         if any(char in username for char in '@/_'):
             raise forms.ValidationError('Нельзя вводить символы: @, /, _')
+        if len(username.split()) > 1:
+            raise forms.ValidationError('Имя пользователя не должно содержать более одного слова')
         return username
 
 
@@ -59,6 +61,8 @@ class UserUpdateForm(forms.ModelForm):
         username = self.cleaned_data['username']
         if any(char in username for char in '@/_'):
             raise forms.ValidationError('Нельзя вводить символы: @, /, _')
+        if len(username.split()) > 1:
+            raise forms.ValidationError('Имя пользователя не должно содержать более одного слова')
         return username
 
 
@@ -66,7 +70,7 @@ class ProfileImageForm(forms.ModelForm):
     img = forms.ImageField(
         label='Загрузить фото',
         required=False,
-        widget=forms.FileInput
+        widget=forms.FileInput(attrs={'class': 'form-img-control'})
     )
 
     class Meta:
