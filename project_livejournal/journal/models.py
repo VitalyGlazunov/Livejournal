@@ -7,16 +7,16 @@ from PIL import Image
 # Модель для статьи
 class Article(models.Model):
     CATEGORY_CHOICES = [
-        ('Category №1', 'Рубрика №1'),
-        ('Category №2', 'Рубрика №2'),
-        ('Category №3', 'Рубрика №3'),
-        ('Category №4', 'Рубрика №4'),
-        ('Category №5', 'Рубрика №5'),
+        ('Analytics', 'Аналитика'),
+        ('ART', 'АРТ'),
+        ('Music', 'Музыка'),
+        ('Science', 'Наука'),
+        ('Varial', 'Разное'),
     ]
     title = models.CharField('Название', max_length=100)
     description = models.TextField('Описание')
     text = models.TextField('Основной текст')
-    category = models.CharField(max_length=50, verbose_name='Рубрика', choices=CATEGORY_CHOICES, default='Рубрика №1')
+    category = models.CharField(max_length=50, verbose_name='Рубрика', choices=CATEGORY_CHOICES, default='Разное')
     author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE)
     publication = models.BooleanField('Статус публикации', default=False)
     date = models.DateTimeField('Дата', default=timezone.now)
