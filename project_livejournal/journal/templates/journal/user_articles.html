@@ -35,59 +35,61 @@
         {% endif %}
       </div>
     </div>
-    <div class="text-author indent-articles">Количество статей {{ author }}: {{ page_obj.paginator.count }}</div>
-          {% for article in Article %}
-          <div class="alert-light">
+    {% if page_obj.paginator.count == 0 %}
+      <p class="text-author">Пользователь пока не опубликовал ни одной статьи.</p>
+    {% else %}
+        <div class="text-author indent-articles">Количество статей {{ author }}: {{ page_obj.paginator.count }}</div>
+              {% for article in Article %}
+              <div class="alert-light">
 
-              <div class="col-md-9 frame frame-wide">
-                  <div class="img-container">
-                    <img src="{{ article.img.url }}">
-                  </div>
-                  <div class="text-container">
-                      <h1 class="font"><strong>{{ article.title|striptags }}</strong></h1>
-                      <p><b></b>{{ article.description|striptags|truncatechars:186 }}</p>
-                      <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
-                      <p>
-                          {% if user == article.author %}
-                      {% if user.profile.status == 'User VIP' or not article.publication %}
-                        <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
-                      {% elif user.is_superuser %}
-                        <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
-                      {% endif %}
-                    {% endif %}
-                    {% if user == article.author or user.is_superuser %}
-                      <a class="btn btn-outline-danger btn-rectangular" href="{% url 'articles-delete' article.id %}">Удалить</a>
-                    {% endif %}
-                      </p>
-                      <p class="published-date">
-                          {% if not article.publication and user == article.author%}
-                            <span class="text-author">Статья не опубликована</span>
-                          {% else %}
-                              <span class="date">{{ article.date | date:"d M. Y" }}</span>
-                              <br>
-                              <span class="time">{{ article.date | date:"H:m" }}</span>
+                  <div class="col-md-9 frame frame-wide">
+                      <div class="img-container">
+                        <img src="{{ article.img.url }}">
+                      </div>
+                      <div class="text-container">
+                          <h1 class="font"><strong>{{ article.title|striptags }}</strong></h1>
+                          <p><b></b>{{ article.description|striptags|truncatechars:186 }}</p>
+                          <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
+                          <p>
+                              {% if user == article.author %}
+                          {% if user.profile.status == 'User VIP' or not article.publication %}
+                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
+                          {% elif user.is_superuser %}
+                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
                           {% endif %}
-                      </p>
-                  </div>
-          </div>
-          {% endfor %}
-          {% if is_paginated %}
-              {% if page_obj.has_previous %}
-                  <a href="{% url 'user-articles' view.kwargs.username %}" class="btn btn-outline-dark">Начало</a>
-                  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
-              {% endif %}
-
-              {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                  <button class ="btn btn-dark">{{ num }}</button>
-                  {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
-                    <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
-                {% endif %}
+                        {% endif %}
+                        {% if user == article.author or user.is_superuser %}
+                          <a class="btn btn-outline-danger btn-rectangular" href="{% url 'articles-delete' article.id %}">Удалить</a>
+                        {% endif %}
+                          </p>
+                          <p class="published-date">
+                              {% if not article.publication and user == article.author%}
+                                <span class="text-author">Статья не опубликована</span>
+                              {% else %}
+                                  <span class="date">{{ article.date | date:"d M. Y" }}</span>
+                              {% endif %}
+                          </p>
+                      </div>
+              </div>
               {% endfor %}
-              {% if page_obj.has_next %}
-                  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
-                  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+              {% if is_paginated %}
+                  {% if page_obj.has_previous %}
+                      <a href="{% url 'user-articles' view.kwargs.username %}" class="btn btn-outline-dark">Начало</a>
+                      <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
+                  {% endif %}
+
+                  {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                      <button class ="btn btn-dark">{{ num }}</button>
+                      {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                        <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
+                    {% endif %}
+                  {% endfor %}
+                  {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+                  {% endif %}
               {% endif %}
-          {% endif %}
-        </div>
+            </div>
+    {% endif %}
 {% endblock %}

@@ -10,6 +10,7 @@
 
 {% block content %}
           <div class="tilted-text font">Последние статьи</div>
+          {% if Article %}
           {% for article in Article %}
           <div class="alert-light">
             <div class="row">
@@ -38,8 +39,6 @@
                       <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
                       <p class="published-date">
                           <span class="date">{{ article.date | date:"d M. Y" }}</span>
-                          <br>
-                          <span class="time">{{ article.date | date:"H:m" }}</span>
                       </p>
                   </div>
               </div>
@@ -64,4 +63,7 @@
               {% endif %}
           {% endif %}
         </div>
+        {% else %}
+            <p class="text-author">К сожалению, на сайте пока нет опубликованных статей. Вы можете стать первым и поделиться своей статьёй!</p>
+        {% endif %}
 {% endblock %}

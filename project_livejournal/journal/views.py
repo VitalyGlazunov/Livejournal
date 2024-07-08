@@ -141,10 +141,11 @@ class CategoriesDetailView(ListView):
     model = Article
     template_name = 'journal/categories.html'
     context_object_name = 'articles'
+    paginate_by = 2
 
     def get_queryset(self):
         category = self.kwargs['category']
-        return Article.objects.filter(category=category, publication=True)
+        return Article.objects.filter(category=category, publication=True).order_by('-date')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -152,6 +153,7 @@ class CategoriesDetailView(ListView):
         category_choices = dict(Article. CATEGORY_CHOICES)
         if category in category_choices:
             ctx['category'] = category_choices[category]
+            ctx['categorys'] = category
         return ctx
 
 
@@ -162,8 +164,12 @@ class PopularView(ListView):
     paginate_by = 2
 
     def get_queryset(self):
+        users_count = User.objects.filter().distinct().count()
+        popularity_threshold = int(users_count * 0.1)
+        if popularity_threshold == 0:
+            popularity_threshold = 1
         return Article.objects.filter(publication=True).filter(
-            Q(author__profile__status='User VIP') | Q(likes__gte=5)
+            Q(author__profile__status='User VIP') | Q(likes__gte=popularity_threshold)
         ).order_by('-likes')
 
 

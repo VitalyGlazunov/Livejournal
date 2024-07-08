@@ -12,58 +12,59 @@
 
 
           <div class="tilted-text font"> Популярное</div>
-
-          {% for article in Article %}
-          <div class="alert-light">
-            <div class="row">
-              <div class="col-md-2">
-                <a href="{% url 'user-articles' article.author %}" class="no-underline">
-                  <div class="profile-container">
-                    <img src="{{ article.author.profile.img.url }} " alt="{{ article.author }}" class="user_images">
-                    <p>{{ article.author.username }}</p>
-                    {% if article.author.profile.status == 'User' %}
-                    <img src="pictures/main_page/user_label.png" alt="Badge" height="50" width="139" class="badge-image">
-                    {% elif article.author.profile.status == 'Admin' %}
-                    <img src="pictures/main_page/admin_label.png" alt="Badge" height="50" width="139" class="badge-image">
-                    {% else %}
-                    <img src="pictures/main_page/user_vip_label.png" alt="Badge" height="50" width="139" class="badge-image">
-                    {% endif %}
+          {% if Article %}
+              {% for article in Article %}
+              <div class="alert-light">
+                <div class="row">
+                  <div class="col-md-2">
+                    <a href="{% url 'user-articles' article.author %}" class="no-underline">
+                      <div class="profile-container">
+                        <img src="{{ article.author.profile.img.url }} " alt="{{ article.author }}" class="user_images">
+                        <p>{{ article.author.username }}</p>
+                        {% if article.author.profile.status == 'User' %}
+                        <img src="pictures/main_page/user_label.png" alt="Badge" height="50" width="139" class="badge-image">
+                        {% elif article.author.profile.status == 'Admin' %}
+                        <img src="pictures/main_page/admin_label.png" alt="Badge" height="50" width="139" class="badge-image">
+                        {% else %}
+                        <img src="pictures/main_page/user_vip_label.png" alt="Badge" height="50" width="139" class="badge-image">
+                        {% endif %}
+                      </div>
+                    </a>
                   </div>
-                </a>
-              </div>
-              <div class="col-md-9 frame">
-                  <div class="img-container">
-                    <img src="{{ article.img.url }}">
+                  <div class="col-md-9 frame">
+                      <div class="img-container">
+                        <img src="{{ article.img.url }}">
+                      </div>
+                      <div class="text-container">
+                          <h1 class="font"><strong>{{ article.title|striptags }}</strong></h1>
+                          <p><b></b>{{ article.description|striptags|truncatechars:210 }}</p>
+                          <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
+                          <p class="published-date">
+                              <span class="date">{{ article.date | date:"d M. Y" }}</span>
+                          </p>
+                      </div>
                   </div>
-                  <div class="text-container">
-                      <h1 class="font"><strong>{{ article.title }}</strong></h1>
-                      <p><b></b>{{ article.description|striptags|truncatechars:210 }}</p>
-                      <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
-                      <p class="published-date">
-                          <span class="date">{{ article.date | date:"d M. Y" }}</span>
-                          <br>
-                          <span class="time">{{ article.date | date:"H:m" }}</span>
-                      </p>
-                  </div>
-              </div>
-            </div>
-          {% endfor %}
-          {% if is_paginated %}
-              {% if page_obj.has_previous %}
-                  <a href="{% url 'popular' %}" class="btn btn-outline-dark">Начало</a>
-                  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
-              {% endif %}
-
-              {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                  <button class ="btn btn-dark">{{ num }}</button>
-                  {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
-                    <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
-                {% endif %}
+                </div>
               {% endfor %}
-              {% if page_obj.has_next %}
-                  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
-                  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+              {% if is_paginated %}
+                  {% if page_obj.has_previous %}
+                      <a href="{% url 'popular' %}" class="btn btn-outline-dark">Начало</a>
+                      <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
+                  {% endif %}
+
+                  {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                      <button class ="btn btn-dark">{{ num }}</button>
+                      {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                        <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
+                    {% endif %}
+                  {% endfor %}
+                  {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+                  {% endif %}
               {% endif %}
+          {% else %}
+                  <p class="text-author">В данный момент нет популярных статей. Загляните позже или посмотрите другие разделы сайта.</p>
           {% endif %}
 {% endblock %}
