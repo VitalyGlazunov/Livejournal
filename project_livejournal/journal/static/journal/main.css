@@ -608,3 +608,30 @@ input.form-img-control {
     word-spacing: normal;
 }
 
+.frame-wide{
+    width: 100%;
+}
+
+.font-no {
+            text-transform: none;
+}
+
+.user-article
+{
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+.indent-articles {
+     margin-bottom: 15px;
+}
+
+.fix-tilted-text{
+    font-weight: normal;
+    font-size: 24px;
+    padding: 10px;
+    transform: none;
+     user-select: none;
+    background-color: black;
+    color: white;
+}

@@ -32,7 +32,7 @@ class UserAllArticlesView(ListView):
     model = Article
     template_name = 'journal/user_articles.html'
     context_object_name = 'Article'
-    paginate_by = 3
+    paginate_by = 2
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs['username'])
@@ -49,6 +49,11 @@ class UserAllArticlesView(ListView):
             profile = Profile.objects.get(user=user)
             ctx['profile'] = profile
             ctx['is_following'] = Follow.objects.filter(follower=user, following=author).exists()
+            if user == author:
+                ctx['title'] = 'Мои статьи'
+            else:
+                ctx['title'] = 'Статьи пользователя'
+                ctx['title_user'] = author
         return ctx
 
 
@@ -154,7 +159,7 @@ class PopularView(ListView):
     model = Article
     template_name = 'journal/popular.html'
     context_object_name = 'Article'
-    peginate = 3
+    paginate_by = 2
 
     def get_queryset(self):
         return Article.objects.filter(publication=True).filter(

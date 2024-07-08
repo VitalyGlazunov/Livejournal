@@ -22,11 +22,11 @@
                     <img src="{{ article.author.profile.img.url }} " alt="{{ article.author }}" class="user_images">
                     <p>{{ article.author.username }}</p>
                     {% if article.author.profile.status == 'User' %}
-                    <img src="pictures/main_page/user_label.png" alt="Badge" height="50" width="128" class="badge-image">
+                    <img src="pictures/main_page/user_label.png" alt="Badge" height="50" width="139" class="badge-image">
                     {% elif article.author.profile.status == 'Admin' %}
-                    <img src="pictures/main_page/admin_label.png" alt="Badge" height="50" width="128" class="badge-image">
+                    <img src="pictures/main_page/admin_label.png" alt="Badge" height="50" width="139" class="badge-image">
                     {% else %}
-                    <img src="pictures/main_page/user_vip_label.png" alt="Badge" height="50" width="128" class="badge-image">
+                    <img src="pictures/main_page/user_vip_label.png" alt="Badge" height="50" width="139" class="badge-image">
                     {% endif %}
                   </div>
                 </a>
@@ -46,26 +46,24 @@
                       </p>
                   </div>
               </div>
+            </div>
           {% endfor %}
           {% if is_paginated %}
               {% if page_obj.has_previous %}
-                  <a href="{% url 'popular' %}" class="btn btn-outline-danger">Начало</a>
-                  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-danger">Предыдущая</a>
+                  <a href="{% url 'popular' %}" class="btn btn-outline-dark">Начало</a>
+                  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
               {% endif %}
 
               {% for num in page_obj.paginator.page_range %}
                 {% if num == page_obj.number %}
-                  <button class ="btn btn-danger">{{ num }}</button>
+                  <button class ="btn btn-dark">{{ num }}</button>
                   {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
-                    <a href="?page={{ num }}" class="btn btn-outline-danger">{{ num }}</a>
+                    <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
                 {% endif %}
               {% endfor %}
               {% if page_obj.has_next %}
-                  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-danger">Следующая</a>
-                  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-danger">Последняя</a>
+                  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+                  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
               {% endif %}
           {% endif %}
-        </div>
-
-
 {% endblock %}

@@ -7,7 +7,7 @@
 {% block content %}
   <div class="container auth-container">
     <div class="registration-form alert-light authorization">
-      <h1 class="text-center font">Авторизация</h1>
+      <h1 class="text-center font fix-tilted-text">Авторизация</h1>
       <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
