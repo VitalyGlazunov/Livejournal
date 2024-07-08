@@ -1,72 +1,76 @@
 {% extends 'journal/base.html' %}
 
 {% block title %}
-  Магазин
+  Подписки
 {% endblock %}
 
-{% block shop_active %}
+{% block subscription_active %}
   active
 {% endblock %}
 
 {% block content %}
-    <div class="container ">
-       <div class="tilted-text font"> Магазин</div>
-
-  {% if user.is_authenticated == False or profile.status == "User" %}
-
-  <section class="shop">
-    <div class="container">
-      <div class="shop_container">
-        <div class="shop_item">
-          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
-          <p>Бесплатно <span>на 10 секунд</span></p>
-          <ul>
-            <li>Получение префикса "VIP пользователь"</li>
-            <li>
-              Возможность редактирования своих статей после публикации
+<div class="tilted-text font">Список подписок</div>
+<div class="container">
+        <ul class="subscription-list">
+            {% for follow in follows %}
+            {{is_following.follow}}
+            <li class="subscription-item">
+                <a href="{% url 'user-articles' follow.following.username %}" class="no-underline subscription-user">
+                <img class="subscription-user" src="{{ follow.following.profile.img.url }}" alt="{{ follow.following.username }}">
+                </a>
+                <div class="author-info">
+                    <a href="{% url 'user-articles' follow.following.username %}" class="no-underline">
+                        <h3 class="font"><b>{{ follow.following.username }}</b></h3>
+                    <p>
+                        {% if follow.following.profile.status == 'User' %}
+                            <img  src="pictures/main_page/user_label.png" alt="Badge" width="180">
+                        {% elif follow.following.profile.status == 'Admin' %}
+                            <img src="pictures/main_page/admin_label.png" alt="Badge" width="180">
+                        {% else %}
+                            <img src="pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+                        {% endif %}
+                    </p>
+                    </a>
+                </div>
+                {% if user.is_authenticated %}
+                  {% if follow.following.username != user %}
+                    <form method="post" action="{% url 'subscription' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="user_id" value="{{ follow.following.id }}">
+                      {% if is_following %}
+                        <button type="submit" class="btn btn-dark btn-rectangular text-author">Отписаться</button>
+                      {% else %}
+                        <button type="submit" class="btn btn-danger btn-rectangular text-author">Подписаться</button>
+                      {% endif %}
+                    </form>
+                  {% endif %}
+                {% endif %}
             </li>
-            <li>Попадание любой статьи в раздел "Популярные"</li>
-          </ul>
-           <form method="post" action="{% url 'test_shop' %}">
-            {% csrf_token %}
-            <button type="submit" name="action" value="upgrade_to_vip" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
-          </form>
-        </div>
-        <div class="shop_item v2">
-          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
-          <p>800 РУБ <span>в пол года</span></p>
-          <ul>
-            <li>Получение префикса "VIP пользователь"</li>
-            <li>
-              Возможность редактирования своих статей после публикации
-            </li>
-            <li>Попадание любой статьи в раздел "Популярные"</li>
-          </ul>
-           <form method="post" action="{{url1}}">
-             {% csrf_token %}
-             <button type="submit" name="action" value="upgrade_to_vip_half_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
-           </form>
-        </div>
-        <div class="shop_item v3">
-          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
-          <p>1500 РУБ <span>в год</span></p>
-          <ul>
-            <li>Получение префикса "VIP пользователь"</li>
-            <li>
-              Возможность редактирования своих статей после публикации
-            </li>
-            <li>Попадание любой статьи в раздел "Популярные"</li>
-          </ul>
-          <form method="post" action="{{url2}}">
-             {% csrf_token %}
-             <button type="submit" name="action" value="upgrade_to_vip_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
-           </form>
-        </div>
-      </div>
+             {% empty %}
+            <p class="text-author">Боюсь, вы еще ни на кого не подписана. Исправьте это и передийте <a href="/">сюда</a> </p>
+            {% endfor %}
+        </ul>
     </div>
-  </section>
-  {% else %}
-    <p class="text-author">Наши поздравления, вы обладаете всеми доступными привилегиями</p>
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+      <a href="{% url 'subscription' %}" class="btn btn-outline-dark">Начало</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <button class="btn btn-dark">{{ num }}</button>
+      {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+        <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+    {% endif %}
   {% endif %}
-
 {% endblock %}
+
+
+
+
+

@@ -7,16 +7,17 @@
 {% block content %}
   <div class="exit-container alert-light">
     <div class="exit-message">
-      <h1>Вы точно хотите удалить статью {{ Article.title }}?</h1>
+      <h1 class="text-center font fix-tilted-text">Вы точно хотите удалить статью {{ Article.title }}?</h1>
     </div>
     <div class="exit-actions">
       <form method="post">
         {% csrf_token %}
         <div class="text-center">
-          <button class="btn btn-outline-warning" type="submit">Да, удалить</button>
-          <a href="{% url 'user-articles' Article.author %}">Нет, оставить</a>
+          <button class="btn btn-dark btn-rectangular text-author" type="submit">Да, удалить</button>
+          <button class="btn btn-dark btn-rectangular text-author" type="submit">Нет, оставить</button>
         </div>
       </form>
     </div>
   </div>
 {% endblock %}
+
