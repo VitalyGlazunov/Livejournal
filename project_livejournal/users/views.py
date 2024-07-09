@@ -1,18 +1,20 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserRegisterForm, ProfileImageForm, UserUpdateForm
-from .models import Profile
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
+
 from journal.models import Article, Like
+from .forms import ProfileImageForm, UserRegisterForm, UserUpdateForm
+from .models import Profile
+
 
 class RegisterView(FormView):
     template_name = 'users/registration.html'
     form_class = UserRegisterForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.save()

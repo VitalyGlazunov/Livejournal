@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block content %}
-  <div class="font tilted-text">Кабинет пользователя</div>
+  <div class="font tilted-text">
+    Кабинет пользователя
+  </div>
   <div class="personal-account">
     <p class="font"><b>Информация обо мне</b></p>
     <div class="profile">
@@ -23,13 +25,13 @@
         <p><b>Имя пользователя:</b> {{ user.username }}</p>
         <p><b>E-mail:</b>
           {% if user.email %}
-            {{ user.email}}
+            {{ user.email }}
           {% else %}
             Не указан
           {% endif %}
         </p>
         <p><b>Статус:</b>
-          {% if user.profile.status == 'Admin'%}
+          {% if user.profile.status == 'Admin' %}
             <span class="badge bg-danger text-white">{{ user.profile.get_status_display }}</span>
           {% elif user.profile.status == 'User VIP' %}
             <span class="badge bg-warning text-white">VIP</span>
@@ -39,7 +41,7 @@
               (Навсегда)
             {% endif %}
           {% else %}
-             <span class="badge bg-secondary text-white">{{ user.profile.get_status_display }}</span>
+            <span class="badge bg-secondary text-white">{{ user.profile.get_status_display }}</span>
           {% endif %}
         </p>
         <p><b>Количество статьей:</b> {{ article_count }}</p>
@@ -47,9 +49,9 @@
       </div>
     </div>
     <div class="profile-buttons">
-        <a href="{% url 'profile_settings' %}" class="btn btn-outline-dark btn-rectangular">Настройки</a>
-        <a href="{% url 'articles-add' %}" class="btn btn-outline-dark btn-rectangular">Добавить статью</a>
-        <a href="{% url 'user-articles' user.username %}" class="btn btn-outline-dark btn-rectangular">Мои статьи</a>
+      <a href="{% url 'profile_settings' %}" class="btn btn-outline-dark btn-rectangular">Настройки</a>
+      <a href="{% url 'article_create' %}" class="btn btn-outline-dark btn-rectangular">Добавить статью</a>
+      <a href="{% url 'user_articles' user.username %}" class="btn btn-outline-dark btn-rectangular">Мои статьи</a>
     </div>
   </div>
 {% endblock %}

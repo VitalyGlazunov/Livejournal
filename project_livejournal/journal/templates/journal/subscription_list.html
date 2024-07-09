@@ -1,0 +1,75 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}
+  Подписки
+{% endblock %}
+
+{% block subscription_active %}
+  active
+{% endblock %}
+
+{% block content %}
+<div class="tilted-text font">Список подписок</div>
+{% if heros %}
+  <div class="container">
+    <ul class="subscription-list">
+      {% for hero in heros %}
+      <li class="subscription-item">
+        <a href="{% url 'user_articles' hero.following.username %}" class="no-underline subscription-user">
+          <img class="subscription-user" src="{{ hero.following.profile.img.url }}" alt="{{ hero.following.username }}">
+        </a>
+        <div class="author-info">
+          <a href="{% url 'user_articles' hero.following.username %}" class="no-underline">
+            <h3 class="font"><b>{{ hero.following.username }}</b></h3>
+            <p>
+              {% if hero.following.profile.status == 'User' %}
+              <img src="pictures/main_page/user_label.png" alt="Badge" width="180">
+              {% elif hero.following.profile.status == 'Admin' %}
+              <img src="pictures/main_page/admin_label.png" alt="Badge" width="180">
+              {% else %}
+              <img src="pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+              {% endif %}
+            </p>
+          </a>
+        </div>
+        {% if user.is_authenticated %}
+          {% if hero.following.username != user.username %}
+          <form method="post" action="{% url 'subscription_list' %}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ hero.following.id }}">
+            {% if heros_id %}
+            <button type="submit" class="btn btn-dark btn-rectangular text-author">Отписаться</button>
+            {% else %}
+            <button type="submit" class="btn btn-danger btn-rectangular text-author">Подписаться</button>
+            {% endif %}
+          </form>
+          {% endif %}
+        {% endif %}
+      </li>
+      {% empty %}
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <div class="text-author">Вы еще ни на кого не подписались.</div>
+{% endif %}
+{% if is_paginated %}
+<div class="container">
+  {% if page_obj.has_previous %}
+  <a href="{% url 'subscription_list' %}" class="btn btn-outline-dark">Начало</a>
+  <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
+  {% endif %}
+  {% for num in page_obj.paginator.page_range %}
+    {% if num == page_obj.number %}
+    <button class="btn btn-dark">{{ num }}</button>
+    {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+    <a href="?page={{ num }}" class="btn btn-outline-dark">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark">Следующая</a>
+  <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-dark">Последняя</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

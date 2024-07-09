@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import Comment, Article
 
 
@@ -53,4 +54,3 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['title', 'category', 'description', 'text', 'publication', 'img']
-

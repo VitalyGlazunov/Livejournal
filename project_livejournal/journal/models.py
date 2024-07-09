@@ -1,10 +1,11 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+
 from PIL import Image
 
-# Модель для статьи
+
 class Article(models.Model):
     CATEGORY_CHOICES = [
         ('Analytics', 'Аналитика'),
@@ -24,7 +25,7 @@ class Article(models.Model):
     img = models.ImageField('Превью', default='default_preview.png', upload_to='preview_images')
 
     def get_absolute_url(self):
-        return reverse('articles-detail', kwargs={'pk': self.pk})
+        return reverse('article_detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         if self.pk is None:

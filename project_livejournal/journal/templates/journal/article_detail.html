@@ -1,0 +1,105 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}
+  {{ article.title }}
+{% endblock %}
+
+{% block index_active %}
+  active
+{% endblock %}
+
+{% block content %}
+  <div class="tilted-text font">
+    {{ article.title|striptags }}
+  </div>
+  <div class="article-container">
+    <div class="author-article-line">
+      <img src="{{ article.author.profile.img.url }}" alt="{{ article.author }}" class="user-article-img">
+      <div class="author-role">
+        <div class="text-author">Автор: {{ article.author }}</div>
+        {% if article.author.profile.status == 'User' %}
+          <img src="/pictures/main_page/user_label.png" alt="Badge" width="180">
+        {% elif article.author.profile.status == 'Admin' %}
+          <img src="/pictures/main_page/admin_label.png" alt="Badge" width="180">
+        {% else %}
+          <img src="/pictures/main_page/user_vip_label.png" alt="Badge" width="180">
+        {% endif %}
+        <a href="{% url 'user_articles' article.author %}" class="no-underline"></a>
+        {% if user.is_authenticated %}
+          {% if article.author != user %}
+            <form method="post" action="{% url 'subscription_list' %}">
+              {% csrf_token %}
+              <input type="hidden" name="user_id" value="{{ article.author.id }}">
+              {% if is_following %}
+                <button type="submit" class="btn btn-dark btn-rectangular text-author">Отписаться</button>
+              {% else %}
+                <button type="submit" class="btn btn-danger btn-rectangular text-author">Подписаться</button>
+              {% endif %}
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="details">
+      <div class="image-block">
+        <img src="{{ article.img.url }}">
+      </div>
+      <div class="text-block">
+        <div class="text-author"><b>Рубрика:</b> {{ article.get_category_display }}</div>
+        <div><b class="text-author">Описание:</b> {{ article.description|safe }}</div>
+      </div>
+    </div>
+    <div>
+      <p>{{ article.text|safe }}</p>
+    </div>
+    {% if article.publication %}
+      {% if user.is_authenticated %}
+        <div class="details">
+          {% if user_has_liked %}
+            <form action="{% url 'article_remove_like' article.pk %}" method="post">
+              {% csrf_token %}
+              <input type="image" src="/pictures/like.png" alt="Удалить лайк"  width="30" height="30">
+            </form>
+          {% else %}
+            <form action="{% url 'article_add_like' article.pk %}" method="post">
+              <input type="image" src="/pictures/unlike.png" alt="Добавить лайк"  width="30" height="30">
+              {% csrf_token %}
+            </form>
+          {% endif %}
+          <div class="text-block font text-like">
+            {{ article.likes }}
+          </div>
+        </div>
+        <div class="comment_text">
+          <form method="post" action="{% url 'add_comment' article.pk %}">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-dark btn-rectangular text-author">Добавить комментарий</button>
+          </form>
+        </div>
+      {% endif %}
+      <div class="author-article-line"></div>
+      <h2 class="comment_text">Комментарии</h2>
+      <ul class="list-group mt-4">
+        {% for comment in article.comments.all %}
+          <li class="list-group-item">
+            <a href="{% url 'user_articles' comment.author.username %}" class="no-underline">
+              <img src="{{ comment.author.profile.img.url }}" alt="{{ comment.author.username }}" class="author-comment-img">
+              <strong>{{ comment.author.username }}</strong>
+            </a>
+            {{ comment.date|date:"d M Y H:i" }}
+            <p>{{ comment.text }}</p>
+            {% if comment.author == user or user.is_superuser %}
+              <form method="post" action="{% url 'delete_comment' article.pk comment.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+              </form>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="list-group-item">Комментариев пока нет.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endblock %}

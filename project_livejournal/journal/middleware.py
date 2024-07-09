@@ -1,5 +1,5 @@
 from django.utils import timezone
-from django.shortcuts import redirect
+
 from users.models import Profile
 
 

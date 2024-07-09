@@ -5,18 +5,16 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container auth-container">
-    <div class="registration-form alert-light authorization">
-      <h1 class="text-center font fix-tilted-text">Авторизация</h1>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div class="text-center">
-          <button class="btn btn-outline-dark btn-rectangular" type="submit">Войти</button>
-        </div>
-      </form>
-    </div>
+<div class="container auth-container">
+  <div class="registration-form alert-light authorization">
+    <h1 class="text-center font fix-tilted-text">Авторизация</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="text-center">
+        <button class="btn btn-outline-dark btn-rectangular" type="submit">Войти</button>
+      </div>
+    </form>
   </div>
+</div>
 {% endblock %}
-
-

@@ -1,9 +1,10 @@
-from django.contrib import admin
-from django.urls import path, include
-from users.views import RegisterView, ProfileSettingsView, ProfileView
-from django.contrib.auth import views as authViews
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.auth import views as authViews
+from django.urls import path, include
+
+from users.views import ProfileSettingsView, ProfileView, RegisterView
 
 
 urlpatterns = [

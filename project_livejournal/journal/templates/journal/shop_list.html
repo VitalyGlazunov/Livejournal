@@ -1,0 +1,71 @@
+{% extends 'journal/base.html' %}
+
+{% block title %}
+   Магазин
+{% endblock %}
+
+{% block shop_active %}
+  active
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="tilted-text font"> Магазин</div>
+
+  {% if not user.is_authenticated or profile.status == "User" %}
+
+  <section class="shop">
+    <div class="container">
+      <div class="shop_container">
+        <div class="shop_item">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>Бесплатно <span>на 10 секунд</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>Возможность редактирования своих статей после публикации</li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+          <form method="post" action="{% url 'test_shop' %}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="upgrade_to_vip" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+          </form>
+        </div>
+
+        <div class="shop_item v2">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>800 РУБ <span>в пол года</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>Возможность редактирования своих статей после публикации</li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+          <form method="post" action="{{ url1 }}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="upgrade_to_vip_half_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+          </form>
+        </div>
+
+        <div class="shop_item v3">
+          <h3>VIP ПОЛЬЗОВАТЕЛЬ</h3>
+          <p>1500 РУБ <span>в год</span></p>
+          <ul>
+            <li>Получение префикса "VIP пользователь"</li>
+            <li>Возможность редактирования своих статей после публикации</li>
+            <li>Попадание любой статьи в раздел "Популярные"</li>
+          </ul>
+          <form method="post" action="{{ url2 }}">
+            {% csrf_token %}
+            <button type="submit" name="action" value="upgrade_to_vip_year" class="w-100 btn btn-lg btn-block btn-primary">Оплатить</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {% else %}
+  <p class="text-author">Наши поздравления, вы обладаете всеми доступными привилегиями</p>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -22,7 +22,7 @@
           {% endif %}
         {% if user.is_authenticated %}
           {% if author != user %}
-            <form method="post" action="{% url 'subscription' %}">
+            <form method="post" action="{% url 'subscription_list' %}">
               {% csrf_token %}
               <input type="hidden" name="user_id" value="{{ author.id }}">
               {% if is_following %}
@@ -39,7 +39,7 @@
       <p class="text-author">Пользователь пока не опубликовал ни одной статьи.</p>
     {% else %}
         <div class="text-author indent-articles">Количество статей {{ author }}: {{ page_obj.paginator.count }}</div>
-              {% for article in Article %}
+              {% for article in articles %}
               <div class="alert-light">
 
                   <div class="col-md-9 frame frame-wide">
@@ -49,17 +49,17 @@
                       <div class="text-container">
                           <h1 class="font"><strong>{{ article.title|striptags }}</strong></h1>
                           <p><b></b>{{ article.description|striptags|truncatechars:186 }}</p>
-                          <a class="read-more font" href="{% url 'articles-detail' article.id %}">Читать...</a>
+                          <a class="read-more font" href="{% url 'article_detail' article.id %}">Читать...</a>
                           <p>
                               {% if user == article.author %}
                           {% if user.profile.status == 'User VIP' or not article.publication %}
-                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
+                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'article_update' article.id %}">Редактировать</a>
                           {% elif user.is_superuser %}
-                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'articles-update' article.id %}">Редактировать</a>
+                            <a class="btn btn-outline-dark btn-rectangular" href="{% url 'article_update' article.id %}">Редактировать</a>
                           {% endif %}
                         {% endif %}
                         {% if user == article.author or user.is_superuser %}
-                          <a class="btn btn-outline-danger btn-rectangular" href="{% url 'articles-delete' article.id %}">Удалить</a>
+                          <a class="btn btn-outline-danger btn-rectangular" href="{% url 'article_delete' article.id %}">Удалить</a>
                         {% endif %}
                           </p>
                           <p class="published-date">
@@ -74,7 +74,7 @@
               {% endfor %}
               {% if is_paginated %}
                   {% if page_obj.has_previous %}
-                      <a href="{% url 'user-articles' view.kwargs.username %}" class="btn btn-outline-dark">Начало</a>
+                      <a href="{% url 'user_articles' view.kwargs.username %}" class="btn btn-outline-dark">Начало</a>
                       <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark">Предыдущая</a>
                   {% endif %}
 
